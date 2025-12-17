@@ -15,6 +15,7 @@ import TotalWorkingPopulationByCountryChart from './components/TotalWorkingPopul
 import TotalEmploymentByCountryChart from './components/TotalEmploymentByCountryChart';
 import TotalUnEmploymentByCountryChart from './components/TotalUnEmploymentByCountryChart';
 import EmploymentRateTrendByCountryChart from './components/EmploymentRateTrendByCountryChart';
+import { useMemo } from 'react';
 
 function MainPage() {
   const {
@@ -24,10 +25,16 @@ function MainPage() {
   } = usePerformancePopulationData('JPN');
 
   if (error) console.log(error);
-  const populationChartDataByCountry = formattedPerformancePopulationData(
-    perforamncePopulationData as z.infer<
-      typeof PerformancePopulationDataByCountrySchema
-    >
+  const populationChartDataByCountry = useMemo(
+    () =>
+      perforamncePopulationData
+        ? formattedPerformancePopulationData(
+            perforamncePopulationData as z.infer<
+              typeof PerformancePopulationDataByCountrySchema
+            >
+          )
+        : [],
+    [perforamncePopulationData]
   );
   const isLoading = isPerformancePopulationDataPending;
   return (
@@ -52,7 +59,7 @@ function MainPage() {
                   {isPerformancePopulationDataPending ? (
                     <>
                       <Skeleton
-                        sx={{ bgcolor: 'grey.900' }}
+                        sx={{ bgcolor: 'slate.900' }}
                         variant="rectangular"
                         width={500}
                         height={500}

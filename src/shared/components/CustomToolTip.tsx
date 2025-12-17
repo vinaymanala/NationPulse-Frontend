@@ -2,10 +2,10 @@ import { Box, Typography } from '@mui/material';
 import type { DataProps } from '@shared/types/common';
 
 type BasicSchemaDataPropsType = {
-  countryName: string;
-  countryCode: string;
+  country_name: string;
+  country_code: string;
   indicator: string;
-  indicatorCode: string;
+  indicator_code: string;
   year: string | number;
   value: number | null;
   color?: string;
@@ -20,7 +20,6 @@ type BasicSchemaDataPropsType = {
 export const CustomToolTip = (props: any) => {
   const { active, payload } = props;
   const isVisible = active && payload && payload.length;
-
   const ToolTipInfo = ({
     item,
     index,
@@ -28,8 +27,10 @@ export const CustomToolTip = (props: any) => {
     item: BasicSchemaDataPropsType;
     index: number;
   }) => {
+    // console.log('I', item);
     if (index !== 0) return;
-    if (item.indicatorCode === 'POP') {
+    if (item.indicator_code === 'POP') {
+      // console.log(item.country_name);
       return (
         <Typography key={`item-${index}`} variant="body2" color={item.color}>
           {item.indicator}:{' '}
@@ -39,9 +40,9 @@ export const CustomToolTip = (props: any) => {
         </Typography>
       );
     } else if (
-      item.indicatorCode === 'CSEM' ||
-      item.indicatorCode === 'IRTA' ||
-      item.indicatorCode === 'LFEXP'
+      item.indicator_code === 'CSEM' ||
+      item.indicator_code === 'IRTA' ||
+      item.indicator_code === 'LFEXP'
     ) {
       return (
         <Typography key={`item-${index}`} variant="body2" color={item.color}>
@@ -52,7 +53,8 @@ export const CustomToolTip = (props: any) => {
           </strong>
         </Typography>
       );
-    } else if (item.indicatorCode === 'B1GQ_POP') {
+    } else if (item.indicator_code === 'B1GQ_POP') {
+      // console.log('HIT', item.country_name);
       return (
         <Typography key={`item-${index}`} variant="body2" color={item.color}>
           {item.indicator}:{' '}
@@ -62,7 +64,7 @@ export const CustomToolTip = (props: any) => {
           </strong>
         </Typography>
       );
-    } else if (item.indicatorCode === 'POP1574') {
+    } else if (item.indicator_code === 'POP1574') {
       return (
         <Typography key={`item-${index}`} variant="body2" color={item.color}>
           {item.indicator}:{' '}
@@ -72,20 +74,20 @@ export const CustomToolTip = (props: any) => {
         </Typography>
       );
     } else if (
-      item.indicatorCode === 'PCORE_YTYPCT' ||
-      item.indicatorCode === 'XGSV_ANNPCT' ||
-      item.indicatorCode === 'GDPV_ANNPCT' ||
-      item.indicatorCode === 'TDDV_ANNPCT' ||
-      item.indicatorCode == 'GNLB' ||
-      item.indicatorCode === 'GE' ||
-      item.indicatorCode === 'GGD' ||
-      item.indicatorCode === 'GGINTN' ||
-      item.indicatorCode === 'GNLBP' ||
-      item.indicatorCode === 'GNLB' ||
-      item.indicatorCode === 'GINV' ||
-      item.indicatorCode === 'UNR' ||
-      item.indicatorCode === 'ET_ANNPCT' ||
-      item.indicatorCode === 'ERS1574'
+      item.indicator_code === 'PCORE_YTYPCT' ||
+      item.indicator_code === 'XGSV_ANNPCT' ||
+      item.indicator_code === 'GDPV_ANNPCT' ||
+      item.indicator_code === 'TDDV_ANNPCT' ||
+      item.indicator_code == 'GNLB' ||
+      item.indicator_code === 'GE' ||
+      item.indicator_code === 'GGD' ||
+      item.indicator_code === 'GGINTN' ||
+      item.indicator_code === 'GNLBP' ||
+      item.indicator_code === 'GNLB' ||
+      item.indicator_code === 'GINV' ||
+      item.indicator_code === 'UNR' ||
+      item.indicator_code === 'ET_ANNPCT' ||
+      item.indicator_code === 'ERS1574'
     ) {
       return (
         <Typography key={`item-${index}`} variant="body2" color={item.color}>
@@ -94,8 +96,8 @@ export const CustomToolTip = (props: any) => {
         </Typography>
       );
     } else if (
-      item.indicatorCode === 'GR' ||
-      item.indicatorCode === 'MGSV_ANNPCT'
+      item.indicator_code === 'GR' ||
+      item.indicator_code === 'MGSV_ANNPCT'
     ) {
       return (
         <div key={index}>

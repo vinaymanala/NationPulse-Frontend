@@ -1,13 +1,26 @@
 import { z } from 'zod';
 
+export const UserSigninSchema = z.object({
+  data: z.object({
+    id: z.string(),
+    name: z.string(),
+    email: z.string().email(),
+  }),
+  isSuccess: z.boolean(),
+  error: z.string().nullable(),
+});
+
+export const PermissionsSchema = z.object({
+  data: z.object({}).array(),
+});
 export const PopulationResponseSchema = z.object({
   data: z
     .object({
-      id: z.number(),
-      countryCode: z.string(),
-      countryName: z.string(),
-      indicatorCode: z.string(),
+      // id: z.number(),
+      country_code: z.string(),
+      country_name: z.string(),
       indicator: z.string(),
+      indicator_code: z.string(),
       year: z.number(),
       value: z.number().or(z.null()),
     })
@@ -17,13 +30,12 @@ export const PopulationResponseSchema = z.object({
 export const HealthResponseSchema = z.object({
   data: z
     .object({
-      id: z.number(),
-      countryCode: z.string(),
-      countryName: z.string(),
-      indicatorCode: z.string(),
+      // id: z.number(),
+      country_code: z.string(),
+      country_name: z.string(),
       indicator: z.string(),
-      sexCode: z.string(),
-      sexName: z.string(),
+      indicator_code: z.string(),
+      sex_name: z.string(),
       cause: z.string(),
       unitRange: z.string(),
       year: z.number(),
@@ -35,11 +47,10 @@ export const HealthResponseSchema = z.object({
 export const GDPPerCapitaResponseSchema = z.object({
   data: z
     .object({
-      id: z.number(),
-      countryCode: z.string(),
-      countryName: z.string(),
-      indicatorCode: z.string(),
+      country_code: z.string(),
+      country_name: z.string(),
       indicator: z.string(),
+      indicator_code: z.string(),
       year: z.string(),
       value: z.number().or(z.null()),
     })
@@ -49,7 +60,6 @@ export const GDPPerCapitaResponseSchema = z.object({
 export const PopulationDataByCountrySchema = z.object({
   data: z
     .object({
-      id: z.number(),
       countryCode: z.string(),
       countryName: z.string(),
       indicatorCode: z.string(),
@@ -67,9 +77,9 @@ export const PerformancePopulationDataByCountrySchema = z.object({
   data: z
     .object({
       id: z.number(),
-      countryCode: z.string(),
-      countryName: z.string(),
-      indicatorCode: z.string(),
+      country_code: z.string(),
+      country_name: z.string(),
+      indicator_code: z.string(),
       indicator: z.string(),
       year: z.number(),
       value: z.number().or(z.null()),

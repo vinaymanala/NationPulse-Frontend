@@ -1,3 +1,25 @@
+export type AuthContextType = {
+  loggedInUser: TUserObject | null;
+  signin: (user: TUserObject | null) => void;
+  signout: (callback: VoidFunction) => void;
+  permissions?: Record<string, never>[];
+};
+
+export type TAPIResponse = {
+  isSuccess: boolean;
+  data: any;
+  error: string | null;
+};
+
+export type TUserFormInput = {
+  name: string;
+  email: string;
+};
+export type TUserObject = {
+  signin?: boolean;
+  id?: string;
+} & TUserFormInput;
+
 export type TitleCardProps = {
   title: string;
   description?: string;

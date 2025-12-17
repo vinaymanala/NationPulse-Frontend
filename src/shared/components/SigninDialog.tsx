@@ -1,0 +1,121 @@
+import { useAuth } from '@app/context';
+import {
+  Alert,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  TextField,
+} from '@mui/material';
+import { useUserSignin } from '@shared/hooks/useUser';
+import type { TUserObject } from '@shared/types/common';
+import React, { useState } from 'react';
+
+type DialogProps = {
+  handleDialogClose?: () => void;
+  open?: boolean;
+};
+
+export function SigninDialog(props: DialogProps) {
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSetError, setIsError] = useState(false);
+  const { open = false, handleDialogClose } = props;
+  const auth = useAuth();
+  const { mutate, isError } = useUserSignin();
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const formJson = Object.fromEntries((formData as any).entries());
+    const name = formJson.name as string;
+    const email = formJson.email as string;
+    setIsLoading(true);
+    mutate(
+      { name, email },
+      {
+        onSuccess: (res) => {
+          console.log('Success Signin', res);
+          auth.signin({
+            id: res.data.id,
+            name: res.data.name,
+            email: res.data.email,
+            signin: true,
+          } as TUserObject);
+          handleDialogClose && handleDialogClose();
+        },
+        onError: (err) => {
+          setIsError(true);
+          console.log('Signin error', err);
+        },
+        onSettled: () => {
+          setIsLoading(false);
+        },
+      }
+    );
+  };
+  return (
+    <React.Fragment>
+      <Dialog open={open} onClose={handleDialogClose}>
+        <DialogTitle>Signin</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Guest user has access to Population and Health modules only.
+            <br />
+            Username: <b>man</b>
+            <br />
+            Email: <b>man@edu.u</b>
+            <br />
+            <br />
+            Demo user can access all modules.
+            <br />
+            Username: <b>woman</b>
+            <br />
+            Email: <b>woman@edu.u</b>
+            <br />
+            <br />
+            *The above credentials permissions can be changed using admin access
+            only.
+          </DialogContentText>
+          <br />
+          {isError ? (
+            <Alert severity="error">Signin Failed. Try again.</Alert>
+          ) : null}
+          <form onSubmit={(e) => handleSubmit(e)} id="subscription-form">
+            <TextField
+              autoFocus
+              required
+              margin="dense"
+              id="name"
+              name="name"
+              label="Enter your username"
+              type="text"
+              fullWidth
+              variant="standard"
+            />
+            <TextField
+              //   autoFocus
+              required
+              margin="dense"
+              id="email"
+              name="email"
+              label="Enter your email address"
+              type="email"
+              fullWidth
+              variant="standard"
+            />
+          </form>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDialogClose} disabled={isLoading}>
+            Cancel
+          </Button>
+          <Button type="submit" form="subscription-form" disabled={isLoading}>
+            Signin
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </React.Fragment>
+  );
+}

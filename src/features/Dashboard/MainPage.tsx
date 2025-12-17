@@ -30,25 +30,44 @@ import {
 import GdpPerCapitaChart from './components/GdpPerCapitaChart';
 import { TitleCard } from '@shared/components/TitleCard';
 import { SectionContainer } from '@shared/components/SectionContainer';
+import { useMemo } from 'react';
 
 function MainPage() {
   const theme = useTheme();
 
   const { data: populationData, isLoading: isPopulationDataPending } =
     usePopulationData();
-  const populationChartData = formattedPopulationData(
-    populationData as z.infer<typeof PopulationResponseSchema>
+  const populationChartData = useMemo(
+    () =>
+      populationData
+        ? formattedPopulationData(
+            populationData as z.infer<typeof PopulationResponseSchema>
+          )
+        : [],
+    [populationData]
   );
 
   const { data: healthData, isLoading: isHealthDataPending } = useHealthData();
-  const healthChartData = formattedHealthData(
-    healthData as z.infer<typeof HealthResponseSchema>
+  const healthChartData = useMemo(
+    () =>
+      healthData
+        ? formattedHealthData(
+            healthData as z.infer<typeof HealthResponseSchema>
+          )
+        : [],
+    [healthData]
   );
 
   const { data: gdpPerCapitaData, isLoading: isGdpPerCapitaDataPending } =
     useGDPPerCapitaData();
-  const gdpPerCapitaChartData = formattedGdpPerCapitaData(
-    gdpPerCapitaData as z.infer<typeof GDPPerCapitaResponseSchema>
+  const gdpPerCapitaChartData = useMemo(
+    () =>
+      gdpPerCapitaData
+        ? formattedGdpPerCapitaData(
+            gdpPerCapitaData as z.infer<typeof GDPPerCapitaResponseSchema>
+          )
+        : [],
+    [gdpPerCapitaData]
   );
 
   const isLoading =
@@ -76,7 +95,7 @@ function MainPage() {
                   {isPopulationDataPending ? (
                     <>
                       <Skeleton
-                        sx={{ bgcolor: 'grey.900' }}
+                        sx={{ bgcolor: 'slate.900' }}
                         variant="rectangular"
                         width={500}
                         height={500}
@@ -92,7 +111,7 @@ function MainPage() {
                   {isHealthDataPending ? (
                     <>
                       <Skeleton
-                        sx={{ bgcolor: 'grey.900' }}
+                        sx={{ bgcolor: 'slate.900' }}
                         variant="rectangular"
                         width={500}
                         height={500}
@@ -108,7 +127,7 @@ function MainPage() {
                   {isGdpPerCapitaDataPending ? (
                     <>
                       <Skeleton
-                        sx={{ bgcolor: 'grey.900' }}
+                        sx={{ bgcolor: 'slate.900' }}
                         variant="rectangular"
                         width={500}
                         height={500}

@@ -1,5 +1,6 @@
 import {
   AppBar,
+  Button,
   Divider,
   Drawer,
   List,
@@ -9,17 +10,30 @@ import {
   ListItemText,
   Typography,
 } from '@mui/material';
+import { SigninDialog } from '@shared/components/SigninDialog';
 import { theme } from '@shared/styles/theme';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function SideBarNav({ children }: { children?: React.ReactNode }) {
   const [openNav, setOpenNav] = useState(true);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   const navigate = useNavigate();
   const isMobile = windowWidth < 768;
+  // useEffect(() => {
+  //   const {
+  //     isLoading: isPermissionsPending,
+  //     data: permissionsData,
+  //     error,
+  //   } = usePermissions();
 
+  //   const userPermissionsData = useMemo(
+  //     () => (permissionsData ? formattedPermissionsData(permissionsData) : []),
+  //     [permissionsData]
+  //   );
+  // }, []);
   useEffect(() => {
     console.log('Window width:', windowWidth);
     const handleResize = () => setWindowWidth(window.innerWidth);
@@ -69,6 +83,39 @@ function SideBarNav({ children }: { children?: React.ReactNode }) {
           borderBottom: `1px solid ${theme.subtleColor}`,
         }}
       >
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'end',
+            position: 'absolute',
+            right: '3rem',
+            top: '1.5rem',
+          }}
+        >
+          <Button
+            style={{
+              backgroundColor: theme.palette.primary.main,
+              color: theme.palette.primary.light,
+              cursor: 'pointer',
+            }}
+            variant="outlined"
+            // onClick={() => window.open('https://docs.nationpulse.com', '_blank')}
+          >
+            Read the Documentation
+          </Button>
+          <Button
+            style={{
+              backgroundColor: theme.palette.primary.main,
+              color: theme.palette.primary.light,
+              cursor: 'pointer',
+            }}
+            variant="outlined"
+            onClick={() => setDialogOpen(true)}
+          >
+            Signin
+          </Button>
+        </div>
         {isMobile ? (
           <Typography variant="h1" padding={theme.padding} gutterBottom>
             <button onClick={(e) => handleNavOpenClose(e)}>NationPulse</button>
@@ -134,6 +181,10 @@ function SideBarNav({ children }: { children?: React.ReactNode }) {
         </List>
         {children}
       </Drawer>
+      <SigninDialog
+        open={dialogOpen}
+        handleDialogClose={() => setDialogOpen((prevState) => !prevState)}
+      />
     </>
   );
 }

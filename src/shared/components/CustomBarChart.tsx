@@ -19,11 +19,13 @@ function CustomBarChart({
   xAxisLabelName,
   title,
   colorFill,
+  xAxisDataKey,
 }: {
   data: DataProps;
   xAxisLabelName: string;
   title: string;
   colorFill: string;
+  xAxisDataKey: string;
 }) {
   return (
     <>
@@ -43,7 +45,7 @@ function CustomBarChart({
           }}
         >
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="year" />
+          <XAxis dataKey={xAxisDataKey ? xAxisDataKey : 'year'} />
           <YAxis />
           <Tooltip content={CustomToolTip} />
           <Legend />

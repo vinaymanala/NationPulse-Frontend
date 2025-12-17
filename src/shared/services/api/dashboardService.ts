@@ -1,12 +1,13 @@
 import type z from 'zod';
 import { apiClient } from './client';
 
-const endpointPrefix = '/dashboard/v1/api';
+const endpointPrefix = '/api/dashboard';
 export const dashboardService = {
   getPopulation: async function <T extends z.ZodSchema>(
     schema: T
   ): Promise<z.output<T>> {
-    const response = await apiClient.get(`${endpointPrefix}/population/10`);
+    const response = await apiClient.get(`${endpointPrefix}/population`);
+    console.log(response.data);
     return schema.parse(response.data);
   },
 
@@ -20,7 +21,7 @@ export const dashboardService = {
   getGDPPerCapita: async function <T extends z.ZodSchema>(
     schema: T
   ): Promise<z.output<T>> {
-    const response = await apiClient.get(`${endpointPrefix}/gdppercapita`);
+    const response = await apiClient.get(`${endpointPrefix}/gdp`);
     return schema.parse(response.data);
   },
 };

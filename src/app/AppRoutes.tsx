@@ -1,11 +1,17 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
 import MainLayout from '@shared/layouts/MainLayout';
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect, useMemo } from 'react';
+// import { usePermissions } from '@shared/hooks/useUtils';
+// import { formattedPermissionsData } from '@shared/utils/utils';
+// import { RequireAuth, useAuth } from './context';
 const Dashboard = lazy(() => import('@features/Dashboard'));
 const Population = lazy(() => import('@features/Population'));
 const Health = lazy(() => import('@features/Health'));
 const Economy = lazy(() => import('@features/Economy'));
+
 function AppRoutes() {
+  // const auth = useAuth();
+
   return (
     <BrowserRouter>
       <MainLayout>

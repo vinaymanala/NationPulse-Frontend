@@ -6,6 +6,7 @@ import type {
   HealthDataByCountrySchema,
   GovernmentDataByCountrySchema,
   GdpPerCapitaDataByCountrySchema,
+  PermissionsSchema,
 } from '@shared/types/api';
 import type {
   DataProps,
@@ -15,16 +16,24 @@ import type {
 } from '@shared/types/common';
 import type z from 'zod';
 
+export const formattedPermissionsData = (
+  data: z.infer<typeof PermissionsSchema>
+) => {
+  if (!data) return [];
+  return data.data;
+};
+
 export const formattedPopulationData = (
   data: z.infer<typeof PopulationResponseSchema>
 ) => {
   if (!data) return [];
+  console.log('response', data);
   return data.data
     .map((item) => ({
-      name: item.countryName,
-      shortName: item.countryCode,
+      name: item.country_name,
+      shortName: item.country_code,
       indicator: item.indicator,
-      indicatorCode: item.indicatorCode,
+      indicator_code: item.indicator_code,
       value: item.value,
       year: item.year,
       info: `Population in ${item.year}`,
@@ -39,10 +48,10 @@ export const formattedHealthData = (
   if (!data) return [];
   return data.data
     .map((item) => ({
-      name: item.countryName,
-      shortName: item.countryCode,
+      name: item.country_name,
+      shortName: item.country_code,
       indicator: item.indicator,
-      indicatorCode: item.indicatorCode,
+      indicator_code: item.indicator_code,
       value: item.value,
       info: `${item.cause} : ${item.unitRange}`,
       year: item.year,
@@ -55,11 +64,12 @@ export const formattedGdpPerCapitaData = (
   data: z.infer<typeof GDPPerCapitaResponseSchema>
 ) => {
   if (!data) return [];
+  console.log('DataGDP', data);
   return data.data.map((item) => ({
-    name: item.countryName,
-    shortName: item.countryCode,
+    name: item.country_name,
+    shortName: item.country_code,
     indicator: item.indicator,
-    indicatorCode: item.indicatorCode,
+    indicator_code: item.indicator_code,
     value: item.value,
     year: item.year,
     info: `Estimated as of (${item.year})`,
@@ -77,51 +87,51 @@ export const formattedPerformancePopulationData = (
   const unemploymentGrowth: PopulationByCountryProps = [];
   const employmentRateTrendGrowth: PopulationByCountryProps = [];
   data.data.map((item) => {
-    if (item.indicatorCode === 'POP') {
+    if (item.indicator_code === 'POP') {
       totalPopulationGrowth.push({
-        name: item.countryName,
-        shortName: item.countryCode,
-        indicatorCode: item.indicatorCode,
+        name: item.country_name,
+        shortName: item.country_code,
+        indicatorCode: item.indicator_code,
         indicator: item.indicator,
         value: item.value,
         year: item.year,
         info: `Estimated growth as of (${item.year})`,
       });
-    } else if (item.indicatorCode == 'POP1574') {
+    } else if (item.indicator_code == 'POP1574') {
       workingPopulationGrowth.push({
-        name: item.countryName,
-        shortName: item.countryCode,
-        indicatorCode: item.indicatorCode,
+        name: item.country_name,
+        shortName: item.country_code,
+        indicatorCode: item.indicator_code,
         indicator: item.indicator,
         value: item.value,
         year: item.year,
         info: `Estimated growth as of (${item.year})`,
       });
-    } else if (item.indicatorCode === 'ET_ANNPCT') {
+    } else if (item.indicator_code === 'ET_ANNPCT') {
       totalEmploymentGrowth.push({
-        name: item.countryName,
-        shortName: item.countryCode,
-        indicatorCode: item.indicatorCode,
+        name: item.country_name,
+        shortName: item.country_code,
+        indicatorCode: item.indicator_code,
         indicator: item.indicator,
         value: item.value,
         year: item.year,
         info: `Estimated growth as of (${item.year})`,
       });
-    } else if (item.indicatorCode === 'UNR') {
+    } else if (item.indicator_code === 'UNR') {
       unemploymentGrowth.push({
-        name: item.countryName,
-        shortName: item.countryCode,
-        indicatorCode: item.indicatorCode,
+        name: item.country_name,
+        shortName: item.country_code,
+        indicatorCode: item.indicator_code,
         indicator: item.indicator,
         value: item.value,
         year: item.year,
         info: `Estimated growth as of (${item.year})`,
       });
-    } else if (item.indicatorCode === 'ERS1574') {
+    } else if (item.indicator_code === 'ERS1574') {
       employmentRateTrendGrowth.push({
-        name: item.countryName,
-        shortName: item.countryCode,
-        indicatorCode: item.indicatorCode,
+        name: item.country_name,
+        shortName: item.country_code,
+        indicatorCode: item.indicator_code,
         indicator: item.indicator,
         value: item.value,
         year: item.year,

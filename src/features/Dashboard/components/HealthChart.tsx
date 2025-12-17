@@ -6,8 +6,8 @@ function HealthChart({ data }: ChartDataProps) {
     <CustomLineChart
       title="Health"
       data={data as DataProps}
-      xAxisLabelName={data[0].indicator as string}
-      xAxisDataKey={'name'}
+      xAxisLabelName={data[0]?.indicator as string}
+      xAxisDataKey={'shortName'}
       colorFill={'#c0603d'}
     />
   );

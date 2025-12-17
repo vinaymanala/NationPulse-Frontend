@@ -1,8 +1,8 @@
 import type z from 'zod';
 import { apiClient } from './client';
 
-const endpointPopulationPrefix = '/population/v1/api';
-const endpointPerfPopulationPrefix = '/performancegrowth/v1/api';
+const endpointPopulationPrefix = '/api/population';
+const endpointPerfPopulationPrefix = '/api/growth';
 
 export const populationService = {
   getPopulationDataByCountry: async function <T extends z.ZodSchema>(
@@ -10,7 +10,7 @@ export const populationService = {
     schema: T
   ): Promise<z.output<T>> {
     const response = await apiClient.get(
-      `${endpointPopulationPrefix}/country/${countryCode}`
+      `${endpointPopulationPrefix}/country?countryCode=${countryCode}`
     );
     return schema.parse(response.data);
   },
@@ -19,7 +19,7 @@ export const populationService = {
     T extends z.ZodSchema,
   >(countryCode: string, schema: T): Promise<z.output<T>> {
     const response = await apiClient.get(
-      `${endpointPerfPopulationPrefix}/population/${countryCode}`
+      `${endpointPerfPopulationPrefix}/population/country?countryCode=${countryCode}`
     );
     return schema.parse(response.data);
   },

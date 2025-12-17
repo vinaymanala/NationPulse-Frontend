@@ -6,8 +6,9 @@ function PopulationChart({ data }: ChartDataProps) {
     <CustomBarChart
       title="Population"
       data={data as DataProps}
-      xAxisLabelName={data[0].indicator as string}
+      xAxisLabelName={data[0]?.indicator as string}
       colorFill={'#c0603d'}
+      xAxisDataKey="shortName"
     />
   );
 }
