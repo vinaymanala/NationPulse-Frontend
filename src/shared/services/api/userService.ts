@@ -18,10 +18,17 @@ export const userService = {
     return schema.parse(response.data);
   },
 
-  getUserSignOut: async function <T extends z.ZodSchema>(
+  postUserSignOut: async function <T extends z.ZodSchema>(
     schema: T
   ): Promise<z.output<T>> {
-    const response = await apiClient.get(`${endPointPrefix}/signout`);
+    const response = await apiClient.post(`${endPointPrefix}/signout`);
+    return schema.parse(response.data);
+  },
+
+  getUserRefreshToken: async function <T extends z.ZodSchema>(
+    schema: T
+  ): Promise<z.output<any>> {
+    const response = await apiClient.post(`${endPointPrefix}/token/refresh`);
     return schema.parse(response.data);
   },
 };

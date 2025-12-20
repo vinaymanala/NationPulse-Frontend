@@ -1,10 +1,14 @@
 export type AuthContextType = {
-  loggedInUser: TUserObject | null;
+  signedInUser?: TUserObject | null;
   signin: (user: TUserObject | null) => void;
   signout: (callback: VoidFunction) => void;
-  permissions?: Record<string, never>[];
 };
 
+export type TModules = {
+  moduleID: number;
+  moduleName: string;
+  path: string;
+};
 export type TAPIResponse = {
   isSuccess: boolean;
   data: any;
@@ -18,6 +22,8 @@ export type TUserFormInput = {
 export type TUserObject = {
   signin?: boolean;
   id?: string;
+  accessToken?: string;
+  permissions?: number[];
 } & TUserFormInput;
 
 export type TitleCardProps = {

@@ -1,3 +1,4 @@
+import { useAuth } from '@app/context';
 import {
   AppBar,
   Button,
@@ -11,29 +12,31 @@ import {
   Typography,
 } from '@mui/material';
 import { SigninDialog } from '@shared/components/SigninDialog';
+import { userUserSignOut } from '@shared/hooks/useUser';
+import { usePermissions } from '@shared/hooks/useUtils';
 import { theme } from '@shared/styles/theme';
-import React, { useEffect, useState } from 'react';
+import { GetUserModules } from '@shared/utils/permissions';
+import { formattedPermissionsData } from '@shared/utils/utils';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function SideBarNav({ children }: { children?: React.ReactNode }) {
   const [openNav, setOpenNav] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-
+  const auth = useAuth();
+  // const authToken = localStorage.getItem('access_token') || '';
+  const userDetails = JSON.parse(localStorage.getItem('user') as string);
+  const [isUserSignedIn, setIsUserSignIn] = useState(false);
   const navigate = useNavigate();
   const isMobile = windowWidth < 768;
-  // useEffect(() => {
-  //   const {
-  //     isLoading: isPermissionsPending,
-  //     data: permissionsData,
-  //     error,
-  //   } = usePermissions();
 
-  //   const userPermissionsData = useMemo(
-  //     () => (permissionsData ? formattedPermissionsData(permissionsData) : []),
-  //     [permissionsData]
-  //   );
-  // }, []);
+  const {
+    isPending: isUserSignOutPending,
+    // data: userSignOutData,
+    mutate: mutateSignOut,
+  } = userUserSignOut();
+
   useEffect(() => {
     console.log('Window width:', windowWidth);
     const handleResize = () => setWindowWidth(window.innerWidth);
@@ -43,16 +46,13 @@ function SideBarNav({ children }: { children?: React.ReactNode }) {
     } else {
       setOpenNav(true);
     }
+
     return () => window.removeEventListener('resize', handleResize);
   }, [windowWidth]);
 
-  const menus = [
-    { id: 0, text: 'Dashboard', link: '/' },
-    { id: 1, text: 'Population', link: '/population' },
-    { id: 2, text: 'Health', link: '/health' },
-    { id: 3, text: 'Economy', link: '/economy' },
-    { id: 5, text: 'Reporting', link: '/reporting' },
-  ];
+  useEffect(() => {
+    setIsUserSignIn(!!auth.signedInUser?.signin);
+  }, [!!auth.signedInUser?.signin]);
 
   const drawerWidth = 280;
 
@@ -67,6 +67,17 @@ function SideBarNav({ children }: { children?: React.ReactNode }) {
     }
     setOpenNav((prev) => !prev);
   };
+
+  const handleSignOut = () => {
+    auth.signout(() => {
+      localStorage.removeItem('access_token');
+      mutateSignOut();
+    });
+  };
+
+  const permissionedModules = GetUserModules(
+    auth.signedInUser?.permissions as number[]
+  );
   return (
     <>
       <AppBar
@@ -111,9 +122,12 @@ function SideBarNav({ children }: { children?: React.ReactNode }) {
               cursor: 'pointer',
             }}
             variant="outlined"
-            onClick={() => setDialogOpen(true)}
+            onClick={() =>
+              isUserSignedIn ? handleSignOut() : setDialogOpen(true)
+            }
+            loading={isUserSignOutPending}
           >
-            Signin
+            {isUserSignedIn ? 'Signout' : 'Signin'}
           </Button>
         </div>
         {isMobile ? (
@@ -158,11 +172,11 @@ function SideBarNav({ children }: { children?: React.ReactNode }) {
         <Divider />
         {/* Add navigation items here */}
         <List>
-          {menus.map((menu, _) => (
-            <ListItem key={menu.id} disablePadding>
+          {permissionedModules.map((m, _) => (
+            <ListItem key={m.moduleID} disablePadding>
               <ListItemButton
                 disableTouchRipple
-                onClick={() => navigate(menu.link)}
+                onClick={() => navigate(m.path)}
               >
                 <ListItemIcon>{'$'}</ListItemIcon>
                 <ListItemText>
@@ -172,7 +186,7 @@ function SideBarNav({ children }: { children?: React.ReactNode }) {
                       color: theme.titleColor,
                     }}
                   >
-                    {menu.text}
+                    {m.moduleName}
                   </Typography>
                 </ListItemText>
               </ListItemButton>

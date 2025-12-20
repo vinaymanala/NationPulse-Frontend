@@ -7,6 +7,7 @@ import type {
   GovernmentDataByCountrySchema,
   GdpPerCapitaDataByCountrySchema,
   PermissionsSchema,
+  UserRefreshTokenSchema,
 } from '@shared/types/api';
 import type {
   DataProps,
@@ -15,6 +16,17 @@ import type {
   PopulationByCountryProps,
 } from '@shared/types/common';
 import type z from 'zod';
+
+export const formattedRefreshTokenData = (
+  data: z.infer<typeof UserRefreshTokenSchema>
+) => {
+  if (!data) return [];
+  const resp = {
+    data: {
+      access_token: data.data.access_token,
+    },
+  };
+};
 
 export const formattedPermissionsData = (
   data: z.infer<typeof PermissionsSchema>
@@ -94,7 +106,7 @@ export const formattedPerformancePopulationData = (
         indicatorCode: item.indicator_code,
         indicator: item.indicator,
         value: item.value,
-        year: item.year,
+        year: Number(item.year),
         info: `Estimated growth as of (${item.year})`,
       });
     } else if (item.indicator_code == 'POP1574') {
@@ -104,7 +116,7 @@ export const formattedPerformancePopulationData = (
         indicatorCode: item.indicator_code,
         indicator: item.indicator,
         value: item.value,
-        year: item.year,
+        year: Number(item.year),
         info: `Estimated growth as of (${item.year})`,
       });
     } else if (item.indicator_code === 'ET_ANNPCT') {
@@ -114,7 +126,7 @@ export const formattedPerformancePopulationData = (
         indicatorCode: item.indicator_code,
         indicator: item.indicator,
         value: item.value,
-        year: item.year,
+        year: Number(item.year),
         info: `Estimated growth as of (${item.year})`,
       });
     } else if (item.indicator_code === 'UNR') {
@@ -124,7 +136,7 @@ export const formattedPerformancePopulationData = (
         indicatorCode: item.indicator_code,
         indicator: item.indicator,
         value: item.value,
-        year: item.year,
+        year: Number(item.year),
         info: `Estimated growth as of (${item.year})`,
       });
     } else if (item.indicator_code === 'ERS1574') {
@@ -134,7 +146,7 @@ export const formattedPerformancePopulationData = (
         indicatorCode: item.indicator_code,
         indicator: item.indicator,
         value: item.value,
-        year: item.year,
+        year: Number(item.year),
         info: `Estimated growth as of (${item.year})`,
       });
     }

@@ -2,10 +2,27 @@ import { z } from 'zod';
 
 export const UserSigninSchema = z.object({
   data: z.object({
-    id: z.string(),
-    name: z.string(),
-    email: z.string().email(),
+    user: z.object({
+      id: z.string(),
+      name: z.string(),
+      email: z.string().email(),
+    }),
+    access_token: z.string(),
   }),
+  isSuccess: z.boolean(),
+  error: z.string().nullable(),
+});
+
+export const UserRefreshTokenSchema = z.object({
+  data: z.object({
+    access_token: z.string(),
+  }),
+  isSuccess: z.boolean(),
+  error: z.string().nullable(),
+});
+
+export const UserSignOutSchema = z.object({
+  data: z.object({}),
   isSuccess: z.boolean(),
   error: z.string().nullable(),
 });
@@ -67,7 +84,7 @@ export const PopulationDataByCountrySchema = z.object({
       sexCode: z.string(),
       sexName: z.string(),
       age: z.string(),
-      year: z.number(),
+      year: z.string(),
       value: z.number().or(z.null()),
     })
     .array(),
@@ -81,7 +98,7 @@ export const PerformancePopulationDataByCountrySchema = z.object({
       country_name: z.string(),
       indicator_code: z.string(),
       indicator: z.string(),
-      year: z.number(),
+      year: z.string(),
       value: z.number().or(z.null()),
     })
     .array(),

@@ -20,7 +20,6 @@ type DialogProps = {
 
 export function SigninDialog(props: DialogProps) {
   const [isLoading, setIsLoading] = useState(false);
-  const [isSetError, setIsError] = useState(false);
   const { open = false, handleDialogClose } = props;
   const auth = useAuth();
   const { mutate, isError } = useUserSignin();
@@ -38,15 +37,15 @@ export function SigninDialog(props: DialogProps) {
         onSuccess: (res) => {
           console.log('Success Signin', res);
           auth.signin({
-            id: res.data.id,
-            name: res.data.name,
-            email: res.data.email,
+            id: res.data.user.id,
+            name: res.data.user.name,
+            email: res.data.user.email,
             signin: true,
           } as TUserObject);
+          localStorage.setItem('user', JSON.stringify(res.data.user));
           handleDialogClose && handleDialogClose();
         },
         onError: (err) => {
-          setIsError(true);
           console.log('Signin error', err);
         },
         onSettled: () => {
