@@ -1,6 +1,8 @@
 import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
 import MainLayout from '@shared/layouts/MainLayout';
-import { lazy, Suspense, useEffect, useMemo } from 'react';
+import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
+import { RequireAuth, useAuth } from './context';
+import { NotFound } from '@shared/components/NotFound';
 // import { usePermissions } from '@shared/hooks/useUtils';
 // import { formattedPermissionsData } from '@shared/utils/utils';
 // import { RequireAuth, useAuth } from './context';
@@ -10,17 +12,46 @@ const Health = lazy(() => import('@features/Health'));
 const Economy = lazy(() => import('@features/Economy'));
 
 function AppRoutes() {
-  // const auth = useAuth();
-
+  const auth = useAuth();
+  // const [loadSideBarModules, setLoadSideBarModules] = useState(false);
+  // useEffect(() => {
+  //   setLoadSideBarModules(!!auth.signedInUser?.signin);
+  // }, [!!auth.signedInUser?.signin]);
   return (
     <BrowserRouter>
       <MainLayout>
         <Suspense fallback={<div>Loading...</div>}>
           <Routes>
-            <Route path="/" element={<Dashboard />}></Route>
-            <Route path="/population" element={<Population />}></Route>
-            <Route path="/health" element={<Health />}></Route>
-            <Route path="/economy" element={<Economy />}></Route>
+            <Route path="/" element={<Dashboard />} />
+            {/* {loadSideBarModules ? ( */}
+            <>
+              <Route
+                path="/population"
+                element={
+                  <RequireAuth>
+                    <Population />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/health"
+                element={
+                  <RequireAuth>
+                    <Health />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/economy"
+                element={
+                  <RequireAuth>
+                    <Economy />
+                  </RequireAuth>
+                }
+              />
+            </>
+            {/* ) : null} */}
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
       </MainLayout>

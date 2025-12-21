@@ -50,7 +50,7 @@ export function GetUserModules(userPermissions: number[]) {
   console.log({ userPermissions });
   const userPermissionsSet =
     userPermissions && userPermissions.length
-      ? new Set(userPermissions.map((p) => p as number))
-      : new Set();
+      ? new Set([10, ...userPermissions.map((p) => p as number)])
+      : new Set([10]);
   return modules.filter((m) => userPermissionsSet.has(m.moduleID));
 }

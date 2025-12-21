@@ -67,6 +67,8 @@ export default function AuthProvider({
             signin: true,
             permissions,
           });
+          localStorage.setItem('user', JSON.stringify(user));
+          localStorage.setItem('permissions', JSON.stringify([...permissions]));
         }
         if (token) authStore.setToken(token);
       } catch (e) {
@@ -87,9 +89,10 @@ export const useAuth = () => useContext(AuthContext);
 
 export function RequireAuth({ children }: { children: JSX.Element }) {
   let auth = useAuth();
+  const user = JSON.parse(localStorage.getItem('user') || '');
   let location = useLocation();
-
-  if (!auth.signedInUser?.signin) {
+  console.log('REQUIREAUTH', auth.signedInUser?.signin);
+  if (!auth.signedInUser?.signin && !user?.id) {
     console.log(auth.signedInUser?.signin);
     // Redirect them to the /signin page, but save the current location they were
     // trying to go to when they were redirected. This allows us to send them

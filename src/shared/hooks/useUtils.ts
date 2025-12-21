@@ -1,15 +1,12 @@
 import { utilService } from '@shared/services/api/utilService';
 import { PermissionsSchema } from '@shared/types/api';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
-export const usePermissions = (
-  isUserSignedIn: boolean | undefined,
-  userID: string | null
-) => {
-  return useQuery({
-    queryKey: ['utils'],
-    queryFn: async () =>
-      utilService.getUserPermissions(userID, PermissionsSchema),
-    enabled: isUserSignedIn,
+export const usePermissions = () => {
+  return useMutation({
+    mutationKey: ['utils'],
+    mutationFn: async (userID: string) => {
+      return utilService.getUserPermissions(userID, PermissionsSchema);
+    },
   });
 };

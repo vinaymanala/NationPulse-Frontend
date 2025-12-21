@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { number, z } from 'zod';
 
 export const UserSigninSchema = z.object({
   data: z.object({
@@ -28,8 +28,11 @@ export const UserSignOutSchema = z.object({
 });
 
 export const PermissionsSchema = z.object({
-  data: z.object({}).array(),
+  data: z.array(z.number()),
+  isSuccess: z.boolean(),
+  error: z.string().nullable(),
 });
+
 export const PopulationResponseSchema = z.object({
   data: z
     .object({
@@ -108,12 +111,12 @@ export const HealthDataByCountrySchema = z.object({
   data: z
     .object({
       id: z.number(),
-      countryCode: z.string(),
-      countryName: z.string(),
-      indicatorCode: z.string(),
+      country_code: z.string(),
+      country_name: z.string(),
+      indicator_code: z.string(),
       indicator: z.string(),
-      sexName: z.string(),
-      sexCode: z.string(),
+      sex_name: z.string(),
+      sex_code: z.string(),
       cause: z.string(),
       unitRange: z.string(),
       year: z.number(),
@@ -126,11 +129,11 @@ export const GovernmentDataByCountrySchema = z.object({
   data: z
     .object({
       id: z.number(),
-      countryCode: z.string(),
-      countryName: z.string(),
-      indicatorCode: z.string(),
+      country_code: z.string(),
+      country_name: z.string(),
+      indicator_code: z.string(),
       indicator: z.string(),
-      year: z.number(),
+      year: z.string(),
       value: z.number().or(z.null()),
     })
     .array(),
@@ -140,11 +143,11 @@ export const GdpPerCapitaDataByCountrySchema = z.object({
   data: z
     .object({
       id: z.number(),
-      countryCode: z.string(),
-      countryName: z.string(),
-      indicatorCode: z.string(),
+      country_code: z.string(),
+      country_name: z.string(),
+      indicator_code: z.string(),
       indicator: z.string(),
-      year: z.number(),
+      year: z.string(),
       value: z.number().or(z.null()),
     })
     .array(),

@@ -13,29 +13,33 @@ import {
 } from '@mui/material';
 import { SigninDialog } from '@shared/components/SigninDialog';
 import { userUserSignOut } from '@shared/hooks/useUser';
-import { usePermissions } from '@shared/hooks/useUtils';
 import { theme } from '@shared/styles/theme';
+import type { TModules } from '@shared/types/common';
 import { GetUserModules } from '@shared/utils/permissions';
-import { formattedPermissionsData } from '@shared/utils/utils';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function SideBarNav({ children }: { children?: React.ReactNode }) {
   const [openNav, setOpenNav] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [permissionedModules, setPermissionedModules] = useState<TModules[]>(
+    []
+  );
   const auth = useAuth();
-  // const authToken = localStorage.getItem('access_token') || '';
-  const userDetails = JSON.parse(localStorage.getItem('user') as string);
   const [isUserSignedIn, setIsUserSignIn] = useState(false);
   const navigate = useNavigate();
   const isMobile = windowWidth < 768;
+  let permissions: number[] = [];
+  try {
+    const raw = localStorage.getItem('permissions');
+    permissions = raw ? JSON.parse(raw) : [];
+  } catch (e) {
+    permissions = [];
+  }
 
-  const {
-    isPending: isUserSignOutPending,
-    // data: userSignOutData,
-    mutate: mutateSignOut,
-  } = userUserSignOut();
+  const { isPending: isUserSignOutPending, mutate: mutateSignOut } =
+    userUserSignOut();
 
   useEffect(() => {
     console.log('Window width:', windowWidth);
@@ -50,9 +54,15 @@ function SideBarNav({ children }: { children?: React.ReactNode }) {
     return () => window.removeEventListener('resize', handleResize);
   }, [windowWidth]);
 
+  console.log('SIGNIN', !!auth.signedInUser?.signin);
   useEffect(() => {
     setIsUserSignIn(!!auth.signedInUser?.signin);
-  }, [!!auth.signedInUser?.signin]);
+    const modules = GetUserModules(
+      permissions.length ? permissions : ([] as any)
+    );
+    console.log({ modules });
+    setPermissionedModules(modules);
+  }, [!!auth.signedInUser?.signin, !!localStorage.getItem('permissions')]);
 
   const drawerWidth = 280;
 
@@ -70,14 +80,13 @@ function SideBarNav({ children }: { children?: React.ReactNode }) {
 
   const handleSignOut = () => {
     auth.signout(() => {
-      localStorage.removeItem('access_token');
+      localStorage.removeItem('user');
+      localStorage.removeItem('permissions');
       mutateSignOut();
+      navigate('/');
     });
   };
 
-  const permissionedModules = GetUserModules(
-    auth.signedInUser?.permissions as number[]
-  );
   return (
     <>
       <AppBar

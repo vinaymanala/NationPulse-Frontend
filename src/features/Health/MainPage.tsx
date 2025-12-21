@@ -43,7 +43,7 @@ function MainPage() {
     formatHealthDataByCountry(
       healthData as z.infer<typeof HealthDataByCountrySchema>
     );
-
+  console.log({ healthChartData });
   useEffect(() => {
     if (!isHealthDataPending) {
       setHealthStateData({

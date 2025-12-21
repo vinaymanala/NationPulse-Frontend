@@ -10,6 +10,7 @@ import {
   TextField,
 } from '@mui/material';
 import { useUserSignin } from '@shared/hooks/useUser';
+import { usePermissions } from '@shared/hooks/useUtils';
 import type { TUserObject } from '@shared/types/common';
 import React, { useState } from 'react';
 
@@ -22,8 +23,12 @@ export function SigninDialog(props: DialogProps) {
   const [isLoading, setIsLoading] = useState(false);
   const { open = false, handleDialogClose } = props;
   const auth = useAuth();
-  const { mutate, isError } = useUserSignin();
-
+  const { mutate: mutateSignin, isError } = useUserSignin();
+  const {
+    mutateAsync: mutatePermissions,
+    isError: isPermissionErr,
+    error: permissionsErr,
+  } = usePermissions();
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
@@ -31,18 +36,33 @@ export function SigninDialog(props: DialogProps) {
     const name = formJson.name as string;
     const email = formJson.email as string;
     setIsLoading(true);
-    mutate(
+    mutateSignin(
       { name, email },
       {
         onSuccess: (res) => {
           console.log('Success Signin', res);
-          auth.signin({
-            id: res.data.user.id,
-            name: res.data.user.name,
-            email: res.data.user.email,
-            signin: true,
-          } as TUserObject);
-          localStorage.setItem('user', JSON.stringify(res.data.user));
+          mutatePermissions(res.data.user.id, {
+            onSuccess: (data) => {
+              auth.signin({
+                id: res.data.user.id,
+                name: res.data.user.name,
+                email: res.data.user.email,
+                signin: true,
+                permissions: data.data,
+              } as TUserObject);
+              localStorage.setItem('user', JSON.stringify(res.data.user));
+              localStorage.setItem('permissions', JSON.stringify(data.data));
+            },
+            onError: (err) => {
+              console.log('Permissions fetch error', err);
+            },
+            onSettled: (data) => {
+              console.log('SETTLED', { data });
+            },
+          });
+          if (isPermissionErr) {
+            console.error('Error', permissionsErr);
+          }
           handleDialogClose && handleDialogClose();
         },
         onError: (err) => {

@@ -11,6 +11,17 @@ export const utilService = {
     const response = await apiClient.post(`${endPointPrefix}/permissions`, {
       userID,
     });
-    return schema.parse(response.data);
+    // Defensive: log response shape to help debugging invalid schema errors
+    try {
+      console.log('RESPONSE', response.data);
+      return schema.parse(response.data);
+    } catch (e) {
+      console.error('Failed to parse permissions response', {
+        url: `${endPointPrefix}/permissions`,
+        responseData: response.data,
+        error: e,
+      });
+      throw e;
+    }
   },
 };

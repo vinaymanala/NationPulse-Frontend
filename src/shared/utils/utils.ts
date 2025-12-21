@@ -26,6 +26,7 @@ export const formattedRefreshTokenData = (
       access_token: data.data.access_token,
     },
   };
+  return resp;
 };
 
 export const formattedPermissionsData = (
@@ -39,7 +40,6 @@ export const formattedPopulationData = (
   data: z.infer<typeof PopulationResponseSchema>
 ) => {
   if (!data) return [];
-  console.log('response', data);
   return data.data
     .map((item) => ({
       name: item.country_name,
@@ -76,7 +76,6 @@ export const formattedGdpPerCapitaData = (
   data: z.infer<typeof GDPPerCapitaResponseSchema>
 ) => {
   if (!data) return [];
-  console.log('DataGDP', data);
   return data.data.map((item) => ({
     name: item.country_name,
     shortName: item.country_code,
@@ -181,15 +180,15 @@ export const formatHealthDataByCountry = (
   if (!data) return result;
 
   data.data.map((item) => {
-    switch (item.sexCode) {
+    switch (item.sex_code) {
       case 'F':
         femaleHealthData.push({
-          name: item.countryName,
-          shortName: item.countryCode,
-          indicatorCode: item.indicatorCode,
+          name: item.country_name,
+          shortName: item.country_code,
+          indicatorCode: item.indicator_code,
           indicator: item.indicator,
-          sexName: item.sexName,
-          sexCode: item.sexCode,
+          sexName: item.sex_name,
+          sexCode: item.sex_code,
           cause: item.cause,
           unitRange: item.unitRange,
           value: item.value,
@@ -199,12 +198,12 @@ export const formatHealthDataByCountry = (
         break;
       case 'M':
         maleHealthData.push({
-          name: item.countryName,
-          shortName: item.countryCode,
-          indicatorCode: item.indicatorCode,
+          name: item.country_name,
+          shortName: item.country_code,
+          indicatorCode: item.indicator_code,
           indicator: item.indicator,
-          sexName: item.sexName,
-          sexCode: item.sexCode,
+          sexName: item.sex_name,
+          sexCode: item.sex_code,
           cause: item.cause,
           unitRange: item.unitRange,
           value: item.value,
@@ -214,12 +213,12 @@ export const formatHealthDataByCountry = (
         break;
       case '_T':
         totalHealthData.push({
-          name: item.countryName,
-          shortName: item.countryCode,
-          indicatorCode: item.indicatorCode,
+          name: item.country_name,
+          shortName: item.country_code,
+          indicatorCode: item.indicator_code,
           indicator: item.indicator,
-          sexName: item.sexName,
-          sexCode: item.sexCode,
+          sexName: item.sex_name,
+          sexCode: item.sex_code,
           cause: item.cause,
           unitRange: item.unitRange,
           value: item.value,
@@ -241,16 +240,15 @@ export const formattedEconomyDataByCountry = (
   if (!data) return [];
   const result = data.data
     .map((item) => ({
-      name: item.countryName,
-      shortName: item.countryName,
+      name: item.country_name,
+      shortName: item.country_name,
       indicator: item.indicator,
-      indicatorCode: item.indicatorCode,
-      year: item.year,
+      indicatorCode: item.indicator_code,
+      year: Number(item.year),
       value: item.value,
       info: `Estimated growth as of (${item.year})`,
     }))
     .sort((a, b) => a.year - b.year);
-  console.log(result);
   return result;
 };
 
@@ -260,11 +258,11 @@ export const formattedGdpPerCapitaDataByCountry = (
   if (!data) return [];
   return data.data
     .map((item) => ({
-      name: item.countryName,
-      shortName: item.countryName,
+      name: item.country_name,
+      shortName: item.country_name,
       indicator: item.indicator,
-      indicatorCode: item.indicatorCode,
-      year: item.year,
+      indicatorCode: item.indicator_code,
+      year: Number(item.year),
       value: item.value,
       info: `Estimated growth as of (${item.year})`,
     }))
