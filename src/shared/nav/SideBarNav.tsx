@@ -14,18 +14,24 @@ import {
 import { SigninDialog } from '@shared/components/SigninDialog';
 import { userUserSignOut } from '@shared/hooks/useUser';
 import { theme } from '@shared/styles/theme';
-import type { TModules } from '@shared/types/common';
+import type { ModulePermissions } from '@shared/types/common';
 import { GetUserModules } from '@shared/utils/permissions';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import PublicIcon from '@mui/icons-material/Public';
+import GroupsIcon from '@mui/icons-material/Groups';
+import HealthAndSafetyIcon from '@mui/icons-material/HealthAndSafety';
+import ShowChartIcon from '@mui/icons-material/ShowChart';
+import SummarizeIcon from '@mui/icons-material/Summarize';
+import KeyIcon from '@mui/icons-material/Key';
 
 function SideBarNav({ children }: { children?: React.ReactNode }) {
   const [openNav, setOpenNav] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const [permissionedModules, setPermissionedModules] = useState<TModules[]>(
-    []
-  );
+  const [permissionedModules, setPermissionedModules] = useState<
+    ModulePermissions[]
+  >([]);
   const auth = useAuth();
   const [isUserSignedIn, setIsUserSignIn] = useState(false);
   const navigate = useNavigate();
@@ -85,6 +91,14 @@ function SideBarNav({ children }: { children?: React.ReactNode }) {
     });
   };
 
+  const moduleIcons: any = {
+    Dashboard: <PublicIcon />,
+    Population: <GroupsIcon />,
+    Health: <HealthAndSafetyIcon />,
+    Economy: <ShowChartIcon />,
+    Reports: <SummarizeIcon />,
+    Permissions: <KeyIcon />,
+  };
   return (
     <>
       <AppBar
@@ -185,7 +199,7 @@ function SideBarNav({ children }: { children?: React.ReactNode }) {
                 disableTouchRipple
                 onClick={() => navigate(m.path)}
               >
-                <ListItemIcon>{'$'}</ListItemIcon>
+                <ListItemIcon>{moduleIcons[m.moduleName]}</ListItemIcon>
                 <ListItemText>
                   <Typography
                     sx={{
