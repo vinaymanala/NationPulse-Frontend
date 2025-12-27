@@ -48,9 +48,18 @@ export function SigninDialog(props: DialogProps) {
                 name: res.data.user.name,
                 email: res.data.user.email,
                 signin: true,
+                isAdmin: res.data.user.id === '2' ? true : false,
                 permissions: data.data,
               } as TUserObject);
-              localStorage.setItem('user', JSON.stringify(res.data.user));
+              const isAdmin = res.data.user.id === '2' ? true : false;
+              localStorage.setItem(
+                'user',
+                JSON.stringify({
+                  ...res.data.user,
+                  isAdmin,
+                  roleID: isAdmin ? 2 : 1,
+                })
+              );
               localStorage.setItem('permissions', JSON.stringify(data.data));
             },
             onError: (err) => {

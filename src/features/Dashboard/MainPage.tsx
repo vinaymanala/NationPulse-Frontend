@@ -31,12 +31,17 @@ import GdpPerCapitaChart from './components/GdpPerCapitaChart';
 import { TitleCard } from '@shared/components/TitleCard';
 import { SectionContainer } from '@shared/components/SectionContainer';
 import { useMemo } from 'react';
+import { Error } from '@shared/components/Error';
 
 function MainPage() {
   const theme = useTheme();
 
-  const { data: populationData, isLoading: isPopulationDataPending } =
-    usePopulationData();
+  const {
+    data: populationData,
+    isLoading: isPopulationDataPending,
+    isError: isPopulationDataError,
+    isSuccess: isPopulationDataSuccess,
+  } = usePopulationData();
   const populationChartData = useMemo(
     () =>
       populationData
@@ -47,7 +52,12 @@ function MainPage() {
     [populationData]
   );
 
-  const { data: healthData, isLoading: isHealthDataPending } = useHealthData();
+  const {
+    data: healthData,
+    isLoading: isHealthDataPending,
+    isError: isHealthDataError,
+    isSuccess: isHealthDataSuccess,
+  } = useHealthData();
   const healthChartData = useMemo(
     () =>
       healthData
@@ -58,8 +68,12 @@ function MainPage() {
     [healthData]
   );
 
-  const { data: gdpPerCapitaData, isLoading: isGdpPerCapitaDataPending } =
-    useGDPPerCapitaData();
+  const {
+    data: gdpPerCapitaData,
+    isLoading: isGdpPerCapitaDataPending,
+    isError: isGdpPerCapitaDataError,
+    isSuccess: isGdpPerCapitaDataSuccess,
+  } = useGDPPerCapitaData();
   const gdpPerCapitaChartData = useMemo(
     () =>
       gdpPerCapitaData
@@ -72,6 +86,11 @@ function MainPage() {
 
   const isLoading =
     isPopulationDataPending && isHealthDataPending && isGdpPerCapitaDataPending;
+  const isError =
+    isPopulationDataError && isHealthDataError && isGdpPerCapitaDataError;
+  console.log({ isError });
+  const isSuccess =
+    isPopulationDataSuccess && isHealthDataSuccess && isGdpPerCapitaDataSuccess;
   return (
     <Box component="main" sx={{ flexGrow: 1, padding: theme.padding }}>
       <TitleCard
@@ -81,9 +100,11 @@ function MainPage() {
       {/* <Divider /> */}
       {isLoading ? (
         <LinearProgress />
+      ) : isError ? (
+        <Error />
       ) : (
         <Box sx={{ width: '100%', background: isLoading ? '#F0F2F5' : 'none' }}>
-          <Divider />
+          <Divider sx={{ marginTop: '1rem' }} />
           <SectionContainer title={"Recent highlight's"}>
             <Box sx={{ flexGrow: 1 }}>
               <Grid

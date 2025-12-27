@@ -4,14 +4,15 @@ import CustomBarChart from '@shared/components/CustomBarChart';
 function TotalEmploymentByCountryChart({
   data,
 }: PerformancePopulationGrowthChartData) {
-  return (
+  return data.totalEmploymentGrowth.length ? (
     <CustomBarChart
       title="Total Employment Growth"
       data={data.totalEmploymentGrowth}
       xAxisLabelName={`${data.totalEmploymentGrowth[0].indicator} per year`}
       colorFill="#6D9DC5"
+      xAxisDataKey="year"
     />
-  );
+  ) : null;
 }
 
 export default TotalEmploymentByCountryChart;

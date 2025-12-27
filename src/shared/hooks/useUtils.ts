@@ -4,7 +4,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 
 export const usePermissions = () => {
   return useMutation({
-    mutationKey: ['utils'],
+    mutationKey: ['utils', 'get', 'permissions'],
     mutationFn: async (userID: string) => {
       return utilService.getUserPermissions(userID, PermissionsSchema);
     },

@@ -12,11 +12,7 @@ export const TitleCard = ({ title, description }: TitleCardProps) => (
     >
       {title}
     </Typography>
-    <Typography
-      variant="h3"
-      padding={theme.logoPadding.padding}
-      color={theme.textColor}
-    >
+    <Typography variant="h3" paddingTop={'1rem'} color={theme.textColor}>
       {description}
     </Typography>
   </>

@@ -1,17 +1,9 @@
 import { CustomToolTip } from '@shared/components/CustomToolTip';
 import { Typography } from '@mui/material';
 import { theme } from '@shared/styles/theme';
-import type {
-  ChartDataProps,
-  HealthChartDataByCountryProps,
-  HealthDataByCountryProps,
-  PerformancePopulationGrowthChartData,
-} from '@shared/types/common';
+import type { HealthChartDataByCountryProps } from '@shared/types/common';
 import {
-  Bar,
-  BarChart,
   CartesianGrid,
-  ComposedChart,
   Legend,
   Line,
   LineChart,

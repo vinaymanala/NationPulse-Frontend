@@ -14,43 +14,86 @@ export function GetPermissions(): object {
   };
 }
 
+export const modules = [
+  {
+    moduleIndex: 1,
+    moduleID: 11,
+    moduleName: 'Dashboard',
+    path: '/',
+    permissionID: 100,
+    permissionIndex: 1,
+  },
+  {
+    moduleIndex: 2,
+    moduleID: 12,
+    moduleName: 'Population',
+    path: '/population',
+    permissionID: 200,
+    permissionIndex: 2,
+  },
+  {
+    moduleIndex: 3,
+    moduleID: 13,
+    moduleName: 'Health',
+    path: '/health',
+    permissionID: 200,
+    permissionIndex: 2,
+  },
+  {
+    moduleIndex: 4,
+    moduleID: 14,
+    moduleName: 'Economy',
+    path: '/economy',
+    permissionID: 300,
+    permissionIndex: 4,
+  },
+  {
+    moduleIndex: 7,
+    moduleID: 16,
+    moduleName: 'Growth',
+    path: '/growth',
+    permissionID: 300,
+    permissionIndex: 4,
+  },
+  {
+    moduleIndex: 5,
+    moduleID: 15,
+    moduleName: 'Reports',
+    path: '/reports',
+    permissionID: 400,
+    permissionIndex: 6,
+  },
+  {
+    moduleIndex: 6,
+    moduleID: 50,
+    moduleName: 'Permissions',
+    path: '/permissions',
+    permissionID: 99,
+    permissionIndex: 7,
+  },
+];
+
+export function HasPermissions(path: string) {
+  const mod = modules.find((m: TModules) => m.path === path);
+  return !!mod; // if module is not registered, treat as public
+}
+
 export function GetUserModules(userPermissions: number[]) {
-  const modules: TModules[] = [
-    {
-      moduleID: 10,
-      moduleName: 'Dashboard',
-      path: '/',
-    },
-    {
-      moduleID: 11,
-      moduleName: 'Population',
-      path: '/population',
-    },
-    {
-      moduleID: 12,
-      moduleName: 'Health',
-      path: '/health',
-    },
-    {
-      moduleID: 13,
-      moduleName: 'Economy',
-      path: '/economy',
-    },
-    {
-      moduleID: 14,
-      moduleName: 'Growth',
-      path: '/growth',
-    },
-    {
-      moduleID: 15,
-      moduleName: 'Reports',
-      path: '/reports',
-    },
-  ];
-  console.log({ userPermissions });
-  const userPermissionsSet =
-    userPermissions && userPermissions.length
-      ? new Set([10, ...userPermissions.map((p) => p as number)])
-      : new Set([10]);
-  return modules.filter((m) => userPermissionsSet.has(m.moduleID));
+  // console.log({ userPermissions });
+  const base = 11;
+  const perms =
+    userPermissions && userPermissions.length ? userPermissions : [];
+  const userPermissionsSet = new Set([base, ...perms.map((p) => Number(p))]);
+  return modules
+    .filter((m) => m.moduleID != 16)
+    .filter((m) => userPermissionsSet.has(m.moduleID));
+}
+
+export function UserHasAccess(path: string, userPermissions?: number[] | null) {
+  const mod = modules.find((m: TModules) => m.path === path);
+  if (!mod) return true; // unknown routes treated as public
+  const perms =
+    userPermissions && userPermissions.length ? userPermissions : [];
+  const userPermissionsSet = new Set([11, ...perms.map((p) => Number(p))]);
+  return userPermissionsSet.has(mod.moduleID);
 }

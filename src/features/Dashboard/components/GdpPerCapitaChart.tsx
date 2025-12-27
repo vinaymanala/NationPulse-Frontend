@@ -2,7 +2,7 @@ import CustomLineChart from '@shared/components/CustomLineChart';
 import type { ChartDataProps, DataProps } from '@shared/types/common';
 
 function GdpPerCapitaChart({ data }: ChartDataProps) {
-  console.log({ data });
+  // console.log({ data });
   return (
     <CustomLineChart
       title=" GDP per capita"

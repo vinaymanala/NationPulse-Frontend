@@ -7,7 +7,7 @@ export const dashboardService = {
     schema: T
   ): Promise<z.output<T>> {
     const response = await apiClient.get(`${endpointPrefix}/population`);
-    console.log(response.data);
+    // console.log(response.data);
     return schema.parse(response.data);
   },
 

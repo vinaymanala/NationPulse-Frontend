@@ -42,7 +42,7 @@ function SideBarNav({ children }: { children?: React.ReactNode }) {
     userUserSignOut();
 
   useEffect(() => {
-    console.log('Window width:', windowWidth);
+    // console.log('Window width:', windowWidth);
     const handleResize = () => setWindowWidth(window.innerWidth);
     window.addEventListener('resize', handleResize);
     if (isMobile) {
@@ -54,13 +54,11 @@ function SideBarNav({ children }: { children?: React.ReactNode }) {
     return () => window.removeEventListener('resize', handleResize);
   }, [windowWidth]);
 
-  console.log('SIGNIN', !!auth.signedInUser?.signin);
   useEffect(() => {
     setIsUserSignIn(!!auth.signedInUser?.signin);
     const modules = GetUserModules(
       permissions.length ? permissions : ([] as any)
     );
-    console.log({ modules });
     setPermissionedModules(modules);
   }, [!!auth.signedInUser?.signin, !!localStorage.getItem('permissions')]);
 

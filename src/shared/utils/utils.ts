@@ -8,6 +8,7 @@ import type {
   GdpPerCapitaDataByCountrySchema,
   PermissionsSchema,
   UserRefreshTokenSchema,
+  CountriesSchema,
 } from '@shared/types/api';
 import type {
   DataProps,
@@ -16,6 +17,13 @@ import type {
   PopulationByCountryProps,
 } from '@shared/types/common';
 import type z from 'zod';
+
+export const formattedCountriesData = (
+  data: z.infer<typeof CountriesSchema>
+) => {
+  if (!data) return [];
+  return data.data;
+};
 
 export const formattedRefreshTokenData = (
   data: z.infer<typeof UserRefreshTokenSchema>

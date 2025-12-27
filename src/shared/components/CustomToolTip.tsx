@@ -27,10 +27,8 @@ export const CustomToolTip = (props: any) => {
     item: BasicSchemaDataPropsType;
     index: number;
   }) => {
-    // console.log('I', item);
     if (index !== 0) return;
     if (item.indicator_code === 'POP') {
-      // console.log(item.country_name);
       return (
         <Typography key={`item-${index}`} variant="body2" color={item.color}>
           {item.indicator}:{' '}
@@ -54,7 +52,6 @@ export const CustomToolTip = (props: any) => {
         </Typography>
       );
     } else if (item.indicator_code === 'B1GQ_POP') {
-      // console.log('HIT', item.country_name);
       return (
         <Typography key={`item-${index}`} variant="body2" color={item.color}>
           {item.indicator}:{' '}

@@ -1,4 +1,12 @@
-import { Box, Divider, Grid, LinearProgress, Skeleton } from '@mui/material';
+import {
+  Autocomplete,
+  Box,
+  Divider,
+  Grid,
+  LinearProgress,
+  Skeleton,
+  TextField,
+} from '@mui/material';
 import { SectionContainer } from '@shared/components/SectionContainer';
 import { TitleCard } from '@shared/components/TitleCard';
 import { usePerformancePopulationData } from '@shared/hooks/usePopulation';
@@ -7,22 +15,29 @@ import type { PerformancePopulationDataByCountrySchema } from '@shared/types/api
 import { formattedPerformancePopulationData } from '@shared/utils/utils';
 import type z from 'zod';
 import TotalPopulationByCountryChart from './components/TotalPopulationByCountryChart';
-import type {
-  PerformancePopulationDataByCountryProps,
-  PerformancePopulationGrowthChartData,
-} from '@shared/types/common';
+import type { PerformancePopulationDataByCountryProps } from '@shared/types/common';
 import TotalWorkingPopulationByCountryChart from './components/TotalWorkingPopulation';
 import TotalEmploymentByCountryChart from './components/TotalEmploymentByCountryChart';
 import TotalUnEmploymentByCountryChart from './components/TotalUnEmploymentByCountryChart';
 import EmploymentRateTrendByCountryChart from './components/EmploymentRateTrendByCountryChart';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
+import CountrySelectionDropdown from '@shared/components/CountrySelectionDropdown';
+import { useAuth } from '@app/context';
+import { Error } from '@shared/components/Error';
 
 function MainPage() {
+  const auth = useAuth();
+  const [selectedCountry, setSelectCountry] = useState<{
+    label: string;
+    code: string;
+  }>(auth.selectedCountry || { label: 'United States', code: 'USA' });
+
   const {
     data: perforamncePopulationData,
     isLoading: isPerformancePopulationDataPending,
     error,
-  } = usePerformancePopulationData('JPN');
+    isError: isPerformancePopulationDataError,
+  } = usePerformancePopulationData(selectedCountry.code);
 
   if (error) console.log(error);
   const populationChartDataByCountry = useMemo(
@@ -36,18 +51,41 @@ function MainPage() {
         : [],
     [perforamncePopulationData]
   );
+
+  const handleSelectCountry = (v: any) => {
+    setSelectCountry({
+      label: v.label,
+      code: v.code,
+    });
+    auth.setSelectedCountry({
+      label: v.label,
+      code: v.code,
+    });
+  };
   const isLoading = isPerformancePopulationDataPending;
+  const isError = isPerformancePopulationDataError;
+  // console.log({ isLoading });
   return (
     <Box component="main" sx={{ flexGrow: 1, padding: theme.padding }}>
-      <TitleCard
-        title="Population"
-        description="View population related insights"
-      />
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <div>
+          <TitleCard
+            title="Population"
+            description="View population related insights"
+          />
+        </div>
+        <CountrySelectionDropdown
+          selectedValue={selectedCountry}
+          onSelectCountry={handleSelectCountry}
+        />
+      </div>
       {isLoading ? (
         <LinearProgress />
+      ) : isError ? (
+        <Error />
       ) : (
         <Box sx={{ width: '100%', background: isLoading ? '#F0F2F5' : 'none' }}>
-          <Divider />
+          <Divider sx={{ marginTop: '1rem' }} />
           <SectionContainer title={'Population growth'}>
             <Box sx={{ flexGrow: 1 }}>
               <Grid
@@ -56,7 +94,7 @@ function MainPage() {
                 padding={theme.logoPadding.padding}
               >
                 <Grid size={6}>
-                  {isPerformancePopulationDataPending ? (
+                  {isLoading ? (
                     <>
                       <Skeleton
                         sx={{ bgcolor: 'slate.900' }}
@@ -74,7 +112,7 @@ function MainPage() {
                   )}
                 </Grid>
                 <Grid size={6}>
-                  {isPerformancePopulationDataPending ? (
+                  {isLoading ? (
                     <>
                       <Skeleton
                         sx={{ bgcolor: 'grey.900' }}
@@ -92,7 +130,7 @@ function MainPage() {
                   )}
                 </Grid>
                 <Grid size={6}>
-                  {isPerformancePopulationDataPending ? (
+                  {isLoading ? (
                     <>
                       <Skeleton
                         sx={{ bgcolor: 'grey.900' }}
@@ -110,7 +148,7 @@ function MainPage() {
                   )}
                 </Grid>
                 <Grid size={6}>
-                  {isPerformancePopulationDataPending ? (
+                  {isLoading ? (
                     <>
                       <Skeleton
                         sx={{ bgcolor: 'grey.900' }}
@@ -128,7 +166,7 @@ function MainPage() {
                   )}
                 </Grid>
                 <Grid size={12}>
-                  {isPerformancePopulationDataPending ? (
+                  {isLoading ? (
                     <>
                       <Skeleton
                         sx={{ bgcolor: 'grey.900' }}

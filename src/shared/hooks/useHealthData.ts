@@ -4,11 +4,12 @@ import { useQuery } from '@tanstack/react-query';
 
 export const useHealthData = (countryCode: string) => {
   return useQuery({
-    queryKey: ['healthDataByCountry'],
+    queryKey: ['healthDataByCountry', countryCode],
     queryFn: async () =>
       healthService.getHealthDataByCountry(
         countryCode,
         HealthDataByCountrySchema
       ),
+    // enabled: Boolean(countryCode),
   });
 };

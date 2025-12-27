@@ -14,12 +14,20 @@ import type {
 } from '@shared/types/common';
 import CustomLineChart from '../../shared/components/CustomLineChart';
 import { useEffect, useState } from 'react';
+import CountrySelectionDropdown from '@shared/components/CountrySelectionDropdown';
+import { useAuth } from '@app/context';
+import { Error } from '@shared/components/Error';
 function MainPage() {
+  const auth = useAuth();
+  const [selectedCountry, setSelectCountry] = useState<{
+    label: string;
+    code: string;
+  }>(auth.selectedCountry || { label: 'United States', code: 'USA' });
   const {
     data: healthData,
     isLoading: isHealthDataPending,
-    error,
-  } = useHealthData('JPN');
+    isError: isHealthDataError,
+  } = useHealthData(selectedCountry.code);
 
   const [healthStateData, setHealthStateData] = useState<{
     maleMortality: HealthDataByCountryProps;
@@ -43,7 +51,6 @@ function MainPage() {
     formatHealthDataByCountry(
       healthData as z.infer<typeof HealthDataByCountrySchema>
     );
-  console.log({ healthChartData });
   useEffect(() => {
     if (!isHealthDataPending) {
       setHealthStateData({
@@ -70,20 +77,40 @@ function MainPage() {
         ),
       });
     }
-  }, [isHealthDataPending]);
-
+  }, [isHealthDataPending, selectedCountry.code]);
+  const handleSelectCountry = (v: any) => {
+    setSelectCountry({
+      label: v.label,
+      code: v.code,
+    });
+    auth.setSelectedCountry({
+      label: v.label,
+      code: v.code,
+    });
+  };
   const isLoading = isHealthDataPending;
+  const isError = isHealthDataError;
   return (
     <Box component="main" sx={{ flexGrow: 1, padding: theme.padding }}>
-      <TitleCard
-        title="Health"
-        description="View country's health status & insights"
-      />
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <div>
+          <TitleCard
+            title="Health"
+            description="View country's health status & insights"
+          />
+        </div>
+        <CountrySelectionDropdown
+          selectedValue={selectedCountry}
+          onSelectCountry={handleSelectCountry}
+        />
+      </div>
       {isLoading ? (
         <LinearProgress />
+      ) : isError ? (
+        <Error />
       ) : (
         <Box sx={{ width: '100%', background: isLoading ? '#F0F2F5' : 'none' }}>
-          <Divider />
+          <Divider sx={{ marginTop: '1rem' }} />
           <SectionContainer title={"Recent highlight's"}>
             <Box sx={{ flexGrow: 1 }}>
               <Grid

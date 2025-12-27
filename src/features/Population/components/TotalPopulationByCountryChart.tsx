@@ -27,14 +27,16 @@ function TotalPopulationByCountryChart({
   //         [`d2TooltipValue`]: matchingd2?.tooltipValue,
   //       };
   //     });
-  return (
-    <CustomLineChart
-      title="Total Population Growth"
-      data={data.totalPopulationGrowth}
-      xAxisLabelName={`${data.totalPopulationGrowth[0].indicator}`}
-      colorFill="#6D9DC5"
-    />
-  );
+  return data.totalPopulationGrowth.length ? (
+    <>
+      <CustomLineChart
+        title="Total Population Growth"
+        data={data.totalPopulationGrowth}
+        xAxisLabelName={`${data.totalPopulationGrowth[0].indicator}`}
+        colorFill="#6D9DC5"
+      />
+    </>
+  ) : null;
 }
 
 export default TotalPopulationByCountryChart;
