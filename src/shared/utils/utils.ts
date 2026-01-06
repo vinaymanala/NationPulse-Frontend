@@ -1,3 +1,4 @@
+import { useAuth } from '@app/context';
 import type {
   PopulationResponseSchema,
   HealthResponseSchema,
@@ -11,12 +12,14 @@ import type {
   CountriesSchema,
 } from '@shared/types/api';
 import type {
+  AuthContextType,
   DataProps,
   HealthDataByCountryProps,
   HealthDataFormattedByCountryProps,
   PopulationByCountryProps,
 } from '@shared/types/common';
 import type z from 'zod';
+import { es } from 'zod/v4/locales';
 
 export const formattedCountriesData = (
   data: z.infer<typeof CountriesSchema>
@@ -318,3 +321,63 @@ export function getCombineData<T extends any[]>(
   }) as T;
   return result;
 }
+
+export const subscribeReportEvent = (auth: AuthContextType): EventSource => {
+  const event = new EventSource(
+    'http://localhost:8081/api/uu/reports/subscribe/event',
+    {
+      withCredentials: true,
+    }
+  );
+
+  event.onopen = () => {
+    console.log('SSE Connection opened successfully');
+  };
+
+  event.onerror = () => {
+    auth.setOpenReportStatus({
+      type: 'error',
+      message: 'Report generation failed. Kindly try again in some time.',
+      open: true,
+    });
+    event.close();
+  };
+
+  event.addEventListener('export-status', (e) => {
+    const rawData = e.data.trim();
+
+    // Parse the JSON string
+    let data;
+    try {
+      data = JSON.parse(rawData);
+    } catch (error) {
+      console.error('Failed to parse JSON:', error);
+      return;
+    }
+
+    const csvData = atob(data.Data);
+    const blob = new Blob([csvData], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `export.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    if (parsedData.StatusCode == 1) {
+      auth.setOpenReportStatus({
+        type: 'success',
+        message:
+          'Your report generated successully. Kindly check in your downloads',
+        open: true,
+      });
+      console.log({ parsedData });
+      event.close(); // Close after receiving success
+    }
+  });
+
+  return event;
+};

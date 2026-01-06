@@ -24,4 +24,22 @@ export const utilService = {
       throw e;
     }
   },
+
+  publishReport: async function <T extends z.ZodSchema>(
+    data: any,
+    schema: T
+  ): Promise<z.output<T>> {
+    try {
+      const response = await apiClient.post(
+        `${endPointPrefix}/reports/publish`,
+        {
+          ...data,
+        }
+      );
+      return schema.parse(response.data);
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  },
 };

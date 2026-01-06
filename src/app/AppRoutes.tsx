@@ -9,6 +9,7 @@ const Population = lazy(() => import('@features/Population'));
 const Health = lazy(() => import('@features/Health'));
 const Economy = lazy(() => import('@features/Economy'));
 const Admin = lazy(() => import('@features/Admin'));
+const Reports = lazy(() => import('@features/Reports'));
 
 function AppRoutes() {
   return (
@@ -39,6 +40,14 @@ function AppRoutes() {
                 element={
                   <RequireAuth>
                     <Economy />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/reports"
+                element={
+                  <RequireAuth>
+                    <Reports />
                   </RequireAuth>
                 }
               />

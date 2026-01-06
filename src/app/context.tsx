@@ -1,15 +1,9 @@
-import { usePermissions } from '@shared/hooks/useUtils';
-import type {
-  AuthContextType,
-  TUserFormInput,
-  TUserObject,
-  TModules,
-} from '@shared/types/common';
+import type { AuthContextType, TUserObject } from '@shared/types/common';
 import React, { createContext, useContext, useState, type JSX } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { apiClient } from '@shared/services/api/client';
 import { authStore } from '@shared/services/authStore';
-import { GetUserModules, UserHasAccess } from '@shared/utils/permissions';
+import { UserHasAccess } from '@shared/utils/permissions';
 
 let AuthContext = createContext<AuthContextType>(null!);
 
@@ -23,6 +17,15 @@ export default function AuthProvider({
     label: string;
     code: string;
   }>({ label: 'United States', code: 'USA' });
+  const [openReportStatus, setOpenReportStatus] = useState<{
+    type: string;
+    message: string;
+    open: boolean;
+  }>({
+    type: 'info',
+    message: '',
+    open: false,
+  });
 
   let signin = (newUser: TUserObject | null) => {
     setSignedInUser(newUser);
@@ -40,6 +43,8 @@ export default function AuthProvider({
     setSelectedCountry,
     signin,
     signout,
+    setOpenReportStatus,
+    openReportStatus,
   };
 
   // Rehydrate auth on mount using refresh endpoint (refresh token should be httponly cookie)

@@ -1,5 +1,6 @@
 import { useAuth } from '@app/context';
 import {
+  Alert,
   AppBar,
   Button,
   Divider,
@@ -9,6 +10,7 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Snackbar,
   Typography,
 } from '@mui/material';
 import { SigninDialog } from '@shared/components/SigninDialog';
@@ -24,6 +26,7 @@ import HealthAndSafetyIcon from '@mui/icons-material/HealthAndSafety';
 import ShowChartIcon from '@mui/icons-material/ShowChart';
 import SummarizeIcon from '@mui/icons-material/Summarize';
 import KeyIcon from '@mui/icons-material/Key';
+import { subscribeReportEvent } from '@shared/utils/utils';
 
 function SideBarNav({ children }: { children?: React.ReactNode }) {
   const [openNav, setOpenNav] = useState(true);
@@ -57,7 +60,9 @@ function SideBarNav({ children }: { children?: React.ReactNode }) {
       setOpenNav(true);
     }
 
-    return () => window.removeEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
   }, [windowWidth]);
 
   useEffect(() => {
@@ -99,6 +104,15 @@ function SideBarNav({ children }: { children?: React.ReactNode }) {
     Reports: <SummarizeIcon />,
     Permissions: <KeyIcon />,
   };
+
+  const handleSnackbarClose = () => {
+    auth.setOpenReportStatus({
+      ...auth.openReportStatus,
+      open: false,
+    });
+  };
+  const vertical = 'bottom';
+  const horizontal = 'right';
   return (
     <>
       <AppBar
@@ -220,6 +234,22 @@ function SideBarNav({ children }: { children?: React.ReactNode }) {
         open={dialogOpen}
         handleDialogClose={() => setDialogOpen((prevState) => !prevState)}
       />
+      <Snackbar
+        open={auth.openReportStatus.open}
+        autoHideDuration={3000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical, horizontal }}
+        // message={auth.openReportStatus.message}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={auth.openReportStatus.type as any}
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          {auth.openReportStatus.message}
+        </Alert>
+      </Snackbar>
     </>
   );
 }

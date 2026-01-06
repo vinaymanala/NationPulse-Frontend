@@ -1,4 +1,4 @@
-import type { TModules } from '@shared/types/common';
+import type { ModulePermissions, TModules } from '@shared/types/common';
 
 export function GetPermissions(): object {
   return {
@@ -74,7 +74,7 @@ export const modules = [
 ];
 
 export function HasPermissions(path: string) {
-  const mod = modules.find((m: TModules) => m.path === path);
+  const mod = modules.find((m: ModulePermissions) => m.path === path);
   return !!mod; // if module is not registered, treat as public
 }
 
@@ -90,7 +90,7 @@ export function GetUserModules(userPermissions: number[]) {
 }
 
 export function UserHasAccess(path: string, userPermissions?: number[] | null) {
-  const mod = modules.find((m: TModules) => m.path === path);
+  const mod = modules.find((m: ModulePermissions) => m.path === path);
   if (!mod) return true; // unknown routes treated as public
   const perms =
     userPermissions && userPermissions.length ? userPermissions : [];

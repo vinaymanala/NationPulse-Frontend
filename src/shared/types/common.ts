@@ -6,6 +6,10 @@ export type AuthContextType = {
   signout: (callback: VoidFunction) => void;
   selectedCountry: { label: string; code: string };
   setSelectedCountry: Dispatch<SetStateAction<{ label: string; code: string }>>;
+  openReportStatus: { type: string; message: string; open: boolean };
+  setOpenReportStatus: Dispatch<
+    SetStateAction<{ type: string; message: string; open: boolean }>
+  >;
 };
 
 export type TUserPermissionsPayload = {
@@ -18,7 +22,7 @@ export type TUserPermissionsPayload = {
 export type ModulePermissions = {
   moduleIndex: number;
   permissionIndex: number;
-  checked: boolean;
+  checked?: boolean;
   moduleID: number;
   moduleName: string;
   path: string;

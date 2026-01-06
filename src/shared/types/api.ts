@@ -1,5 +1,13 @@
 import { z } from 'zod';
 
+export const PublishReportSchema = z.object({
+  data: z.object({
+    status: z.string(),
+    statusCode: z.number(),
+    data: z.any(),
+  }),
+});
+
 export const CountriesSchema = z.object({
   data: z.object({
     message: z.string(),
