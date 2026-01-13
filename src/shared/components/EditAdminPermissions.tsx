@@ -37,7 +37,6 @@ export const EditPermissionsDialog = (props: {
     data,
     setData,
     open,
-    isGetUserPermissionsLoading,
     isSetUserPermissionsLoading,
     // isGetUserPermissionsError,
     // isSetUserPermissionsError,
@@ -45,9 +44,9 @@ export const EditPermissionsDialog = (props: {
     setUserPermissions,
   } = props;
 
-  if (!isGetUserPermissionsLoading) {
-    console.log({ data });
-  }
+  // if (!isGetUserPermissionsLoading) {
+  //   console.log({ data });
+  // }
 
   const handleSingleSelect = (value: boolean, id: number) => {
     const ups = data?.map((mp) => {
@@ -83,11 +82,13 @@ export const EditPermissionsDialog = (props: {
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                 >
                   <Checkbox
-                    checked={mp.checked}
+                    checked={mp.permissionIndex === 5 ? true : mp.checked}
                     onChange={(_, value) =>
                       handleSingleSelect(value, mp.moduleID)
                     }
-                    disabled={mp.permissionIndex === 7}
+                    disabled={
+                      mp.permissionIndex === 7 || mp.permissionIndex === 5
+                    }
                   />
                   <TableCell component="th" scope="row">
                     {mp.moduleID}

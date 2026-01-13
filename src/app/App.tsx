@@ -6,10 +6,7 @@ import { theme } from '@shared/styles/theme';
 import AppRoutes from '@app/AppRoutes';
 import './index.css';
 import AuthProvider from './context';
-import React from 'react';
 
-// Create a single QueryClient instance with sensible defaults to avoid
-// re-creating it on every render (which causes cache reset and refetches).
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -24,18 +21,6 @@ const queryClient = new QueryClient({
 });
 
 function App() {
-  // React.useEffect(() => {
-  //   const handlePageHide = (event: PageTransitionEvent) => {
-  //     if (event.persisted === false) {
-  //       localStorage.removeItem('user');
-  //       localStorage.removeItem('permissions');
-  //     }
-  //   };
-
-  //   window.addEventListener('pagehide', handlePageHide);
-  //   return () => window.removeEventListener('pagehide', handlePageHide);
-  // });
-
   return (
     <ThemeProvider theme={theme}>
       <QueryClientProvider client={queryClient}>

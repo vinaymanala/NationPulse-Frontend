@@ -94,6 +94,7 @@ export const PopulationResponseSchema = z.object({
       indicator_code: z.string(),
       year: z.number(),
       value: z.number().or(z.null()),
+      // last_updated: z.string(),
     })
     .array(),
 });
@@ -111,6 +112,7 @@ export const HealthResponseSchema = z.object({
       unitRange: z.string(),
       year: z.number(),
       value: z.number().or(z.null()),
+      // last_updated: z.string(),
     })
     .array(),
 });
@@ -124,6 +126,7 @@ export const GDPPerCapitaResponseSchema = z.object({
       indicator_code: z.string(),
       year: z.string(),
       value: z.number().or(z.null()),
+      // last_updated: z.string(),
     })
     .array(),
 });
@@ -140,6 +143,7 @@ export const PopulationDataByCountrySchema = z.object({
       age: z.string(),
       year: z.string(),
       value: z.number().or(z.null()),
+      last_updated: z.string(),
     })
     .array(),
 });
@@ -154,6 +158,7 @@ export const PerformancePopulationDataByCountrySchema = z.object({
       indicator: z.string(),
       year: z.string(),
       value: z.number().or(z.null()),
+      last_updated: z.string(),
     })
     .array(),
 });
@@ -172,6 +177,7 @@ export const HealthDataByCountrySchema = z.object({
       unitRange: z.string(),
       year: z.number(),
       value: z.number().or(z.null()),
+      last_updated: z.string(),
     })
     .array(),
 });
@@ -186,6 +192,7 @@ export const GovernmentDataByCountrySchema = z.object({
       indicator: z.string(),
       year: z.string(),
       value: z.number().or(z.null()),
+      last_updated: z.string(),
     })
     .array(),
 });
@@ -200,6 +207,7 @@ export const GdpPerCapitaDataByCountrySchema = z.object({
       indicator: z.string(),
       year: z.string(),
       value: z.number().or(z.null()),
+      last_updated: z.string(),
     })
     .array(),
 });

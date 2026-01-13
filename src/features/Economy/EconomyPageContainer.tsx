@@ -1,5 +1,12 @@
 import { theme } from '@shared/styles/theme';
-import { Box, Divider, Grid, LinearProgress, Skeleton } from '@mui/material';
+import {
+  Box,
+  Divider,
+  Grid,
+  LinearProgress,
+  Skeleton,
+  Typography,
+} from '@mui/material';
 
 import { z } from 'zod';
 import { TitleCard } from '@shared/components/TitleCard';
@@ -70,7 +77,7 @@ function EconomyPageContainer() {
     label: string;
     code: string;
   }>(auth.selectedCountry || { label: 'United States', code: 'USA' });
-  console.log(selectedCountry.label);
+
   const {
     data: governmentData,
     isLoading: isGovernmentDataPending,
@@ -157,7 +164,6 @@ function EconomyPageContainer() {
       code: v.code,
     });
   };
-  console.log({ economyData });
   // consider loading when either data source is still pending
   const isLoading = isGovernmentDataPending || isTradeDataPending;
   // treat error if either source errors
@@ -173,6 +179,9 @@ function EconomyPageContainer() {
             title="Economy"
             description="View country's economy strength"
           />
+          <Typography variant="h4" padding={'1em 0em'}>
+            {`Last updated data: ${economyData?.governmentFiscalBalance[0]?.last_updated}`}
+          </Typography>
         </div>
         <CountrySelectionDropdown
           selectedValue={selectedCountry}

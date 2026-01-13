@@ -8,7 +8,7 @@ export const countryService = {
     const response = await apiClient.get(
       `https://www.ipqualityscore.com/api/json/country/list`
     );
-    console.log(response.data);
+    // console.log(response.data);
     return schema.parse(response.data);
   },
 };

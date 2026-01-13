@@ -6,7 +6,7 @@ import {
 import { useQuery } from '@tanstack/react-query';
 
 export const useGovernmentDataByCountry = (countryCode: string) => {
-  console.log({ countryCode });
+  // console.log({ countryCode });
   return useQuery({
     queryKey: ['governmentDataByCountry', countryCode],
     queryFn: async () =>

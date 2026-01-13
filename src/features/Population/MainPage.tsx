@@ -6,6 +6,7 @@ import {
   LinearProgress,
   Skeleton,
   TextField,
+  Typography,
 } from '@mui/material';
 import { SectionContainer } from '@shared/components/SectionContainer';
 import { TitleCard } from '@shared/components/TitleCard';
@@ -64,6 +65,8 @@ function MainPage() {
   };
   const isLoading = isPerformancePopulationDataPending;
   const isError = isPerformancePopulationDataError;
+  const popData =
+    populationChartDataByCountry as PerformancePopulationDataByCountryProps;
   // console.log({ isLoading });
   return (
     <Box component="main" sx={{ flexGrow: 1, padding: theme.padding }}>
@@ -73,6 +76,9 @@ function MainPage() {
             title="Population"
             description="View population related insights"
           />
+          <Typography variant="h4" padding={'1em 0em'}>
+            {`Last updated data: ${popData?.totalPopulationGrowth && popData?.totalPopulationGrowth[0].last_updated}`}
+          </Typography>
         </div>
         <CountrySelectionDropdown
           selectedValue={selectedCountry}
@@ -86,7 +92,7 @@ function MainPage() {
       ) : (
         <Box sx={{ width: '100%', background: isLoading ? '#F0F2F5' : 'none' }}>
           <Divider sx={{ marginTop: '1rem' }} />
-          <SectionContainer title={'Population growth'}>
+          <SectionContainer title={'Growth'}>
             <Box sx={{ flexGrow: 1 }}>
               <Grid
                 container

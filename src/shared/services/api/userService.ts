@@ -9,12 +9,12 @@ export const userService = {
     userDetails: TUserFormInput,
     schema: T
   ): Promise<z.output<T>> {
-    console.log(userDetails);
+    // console.log(userDetails);
     const response = await apiClient.post(
       `${endPointPrefix}/signin`,
       userDetails
     );
-    console.log(response.data);
+    // console.log(response.data);
     return schema.parse(response.data);
   },
 

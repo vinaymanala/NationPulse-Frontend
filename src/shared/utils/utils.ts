@@ -19,8 +19,10 @@ import type {
   PopulationByCountryProps,
 } from '@shared/types/common';
 import type z from 'zod';
-import { es } from 'zod/v4/locales';
 
+const getFormattedData = (date: string) => {
+  return new Date(date).toUTCString();
+};
 export const formattedCountriesData = (
   data: z.infer<typeof CountriesSchema>
 ) => {
@@ -56,7 +58,7 @@ export const formattedPopulationData = (
       name: item.country_name,
       shortName: item.country_code,
       indicator: item.indicator,
-      indicator_code: item.indicator_code,
+      indicatorCode: item.indicator_code,
       value: item.value,
       year: item.year,
       info: `Population in ${item.year}`,
@@ -74,7 +76,7 @@ export const formattedHealthData = (
       name: item.country_name,
       shortName: item.country_code,
       indicator: item.indicator,
-      indicator_code: item.indicator_code,
+      indicatorCode: item.indicator_code,
       value: item.value,
       info: `${item.cause} : ${item.unitRange}`,
       year: item.year,
@@ -91,7 +93,7 @@ export const formattedGdpPerCapitaData = (
     name: item.country_name,
     shortName: item.country_code,
     indicator: item.indicator,
-    indicator_code: item.indicator_code,
+    indicatorCode: item.indicator_code,
     value: item.value,
     year: item.year,
     info: `Estimated as of (${item.year})`,
@@ -118,6 +120,7 @@ export const formattedPerformancePopulationData = (
         value: item.value,
         year: Number(item.year),
         info: `Estimated growth as of (${item.year})`,
+        last_updated: getFormattedData(item.last_updated),
       });
     } else if (item.indicator_code == 'POP1574') {
       workingPopulationGrowth.push({
@@ -128,6 +131,7 @@ export const formattedPerformancePopulationData = (
         value: item.value,
         year: Number(item.year),
         info: `Estimated growth as of (${item.year})`,
+        last_updated: getFormattedData(item.last_updated),
       });
     } else if (item.indicator_code === 'ET_ANNPCT') {
       totalEmploymentGrowth.push({
@@ -138,6 +142,7 @@ export const formattedPerformancePopulationData = (
         value: item.value,
         year: Number(item.year),
         info: `Estimated growth as of (${item.year})`,
+        last_updated: getFormattedData(item.last_updated),
       });
     } else if (item.indicator_code === 'UNR') {
       unemploymentGrowth.push({
@@ -148,6 +153,7 @@ export const formattedPerformancePopulationData = (
         value: item.value,
         year: Number(item.year),
         info: `Estimated growth as of (${item.year})`,
+        last_updated: getFormattedData(item.last_updated),
       });
     } else if (item.indicator_code === 'ERS1574') {
       employmentRateTrendGrowth.push({
@@ -158,6 +164,7 @@ export const formattedPerformancePopulationData = (
         value: item.value,
         year: Number(item.year),
         info: `Estimated growth as of (${item.year})`,
+        last_updated: getFormattedData(item.last_updated),
       });
     }
   });
@@ -205,6 +212,7 @@ export const formatHealthDataByCountry = (
           value: item.value,
           year: item.year,
           info: `Estimated growth as of (${item.year})`,
+          last_updated: getFormattedData(item.last_updated),
         });
         break;
       case 'M':
@@ -220,6 +228,7 @@ export const formatHealthDataByCountry = (
           value: item.value,
           year: item.year,
           info: `Estimated growth as of (${item.year})`,
+          last_updated: getFormattedData(item.last_updated),
         });
         break;
       case '_T':
@@ -235,6 +244,7 @@ export const formatHealthDataByCountry = (
           value: item.value,
           year: item.year,
           info: `Estimated growth as of (${item.year})`,
+          last_updated: getFormattedData(item.last_updated),
         });
     }
   });
@@ -258,6 +268,7 @@ export const formattedEconomyDataByCountry = (
       year: Number(item.year),
       value: item.value,
       info: `Estimated growth as of (${item.year})`,
+      last_updated: getFormattedData(item.last_updated),
     }))
     .sort((a, b) => a.year - b.year);
   return result;
@@ -276,6 +287,7 @@ export const formattedGdpPerCapitaDataByCountry = (
       year: Number(item.year),
       value: item.value,
       info: `Estimated growth as of (${item.year})`,
+      last_updated: getFormattedData(item.last_updated),
     }))
     .sort((a, b) => a.year - b.year);
 };
@@ -367,14 +379,14 @@ export const subscribeReportEvent = (auth: AuthContextType): EventSource => {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
 
-    if (parsedData.StatusCode == 1) {
+    if (data.StatusCode == 1) {
       auth.setOpenReportStatus({
         type: 'success',
         message:
           'Your report generated successully. Kindly check in your downloads',
         open: true,
       });
-      console.log({ parsedData });
+      // console.log({ data });
       event.close(); // Close after receiving success
     }
   });

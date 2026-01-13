@@ -1,5 +1,5 @@
-import { theme, useTheme } from '@shared/styles/theme';
-import { Box, Divider, Grid, LinearProgress, Skeleton } from '@mui/material';
+import { theme } from '@shared/styles/theme';
+import { Box, Divider, Grid, LinearProgress, Typography } from '@mui/material';
 
 import { z } from 'zod';
 import { TitleCard } from '@shared/components/TitleCard';
@@ -90,14 +90,18 @@ function MainPage() {
   };
   const isLoading = isHealthDataPending;
   const isError = isHealthDataError;
+
   return (
     <Box component="main" sx={{ flexGrow: 1, padding: theme.padding }}>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <div>
           <TitleCard
-            title="Health"
+            title="Public health"
             description="View country's health status & insights"
           />
+          <Typography variant="h4" padding={'1em 0em'}>
+            {`Last updated data: ${healthChartData?.totalHealthData[0]?.last_updated}`}
+          </Typography>
         </div>
         <CountrySelectionDropdown
           selectedValue={selectedCountry}
@@ -111,7 +115,7 @@ function MainPage() {
       ) : (
         <Box sx={{ width: '100%', background: isLoading ? '#F0F2F5' : 'none' }}>
           <Divider sx={{ marginTop: '1rem' }} />
-          <SectionContainer title={"Recent highlight's"}>
+          <SectionContainer title={'Mortality and accident prone cases'}>
             <Box sx={{ flexGrow: 1 }}>
               <Grid
                 container

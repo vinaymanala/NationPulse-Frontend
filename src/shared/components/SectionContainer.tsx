@@ -7,7 +7,7 @@ export const SectionContainer = ({
   children,
 }: SectionContainerProps) => (
   <>
-    <Typography variant="h2" padding={theme.logoPadding.padding}>
+    <Typography variant="h2" sx={{ padding: '1em 0em' }}>
       {title}
     </Typography>
     {children}

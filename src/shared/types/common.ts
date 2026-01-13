@@ -94,6 +94,7 @@ export type PopulationByCountryProps = {
   year: number;
   value: number | null;
   info: string;
+  last_updated: string;
 }[];
 
 export type PerformancePopulationDataByCountryProps = {
@@ -120,6 +121,7 @@ export type HealthDataByCountryProps = {
   year: number;
   value: number | null;
   info: string;
+  last_updated: string;
 }[];
 
 export type HealthDataFormattedByCountryProps = {
@@ -140,4 +142,5 @@ export type EconomyDataByCountryProps = {
   year: number;
   value: number | null;
   info: string;
+  last_updated: string;
 }[];

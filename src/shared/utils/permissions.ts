@@ -1,4 +1,4 @@
-import type { ModulePermissions, TModules } from '@shared/types/common';
+import type { ModulePermissions } from '@shared/types/common';
 
 export function GetPermissions(): object {
   return {
@@ -53,7 +53,7 @@ export const modules = [
     moduleName: 'Growth',
     path: '/growth',
     permissionID: 300,
-    permissionIndex: 4,
+    permissionIndex: 5,
   },
   {
     moduleIndex: 5,

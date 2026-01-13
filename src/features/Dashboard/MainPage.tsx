@@ -88,7 +88,7 @@ function MainPage() {
     isPopulationDataPending && isHealthDataPending && isGdpPerCapitaDataPending;
   const isError =
     isPopulationDataError && isHealthDataError && isGdpPerCapitaDataError;
-  console.log({ isError });
+
   const isSuccess =
     isPopulationDataSuccess && isHealthDataSuccess && isGdpPerCapitaDataSuccess;
   return (

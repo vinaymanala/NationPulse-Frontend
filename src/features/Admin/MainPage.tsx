@@ -97,7 +97,7 @@ const MainPage = () => {
                   data={usersData.data || []}
                   editPermissions={(userID: number) => {
                     setOpenDialog(true);
-                    console.log('Clicked', userID);
+                    // console.log('Clicked', userID);
                     getUserPermissionsMutate(userID.toString());
                     setUserID(userID.toString());
                     setSelectedUser(
@@ -121,7 +121,7 @@ const MainPage = () => {
                   isGetUserPermissionsError={isGetUserPermissionsError}
                   isSetUserPermissionsError={isSetUserPermissionError}
                   setUserPermissions={() => {
-                    console.log({ userPermissionsPayload });
+                    // console.log({ userPermissionsPayload });
                     setUserPermissionsMutate(userPermissionsPayload);
                     setOpenDialog(false);
                   }}

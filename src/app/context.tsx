@@ -101,7 +101,7 @@ export function RequireAuth({ children }: { children: JSX.Element }) {
     : null;
   let location = useLocation();
 
-  console.log('REQUIREAUTH', auth.signedInUser?.signin);
+  // console.log('REQUIREAUTH', auth.signedInUser?.signin);
   if (!auth.signedInUser?.signin && !user?.id) {
     return <Navigate to="/" state={{ from: location }} replace />;
   }
