@@ -233,6 +233,7 @@ function SideBarNav({ children }: { children?: React.ReactNode }) {
       <SigninDialog
         open={dialogOpen}
         handleDialogClose={() => setDialogOpen((prevState) => !prevState)}
+        handleSignOut={() => handleSignOut()}
       />
       <Snackbar
         open={auth.openReportStatus.open}

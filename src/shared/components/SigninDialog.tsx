@@ -17,11 +17,12 @@ import React, { useState } from 'react';
 type DialogProps = {
   handleDialogClose?: () => void;
   open?: boolean;
+  handleSignOut: () => void;
 };
 
 export function SigninDialog(props: DialogProps) {
   const [isLoading, setIsLoading] = useState(false);
-  const { open = false, handleDialogClose } = props;
+  const { open = false, handleDialogClose, handleSignOut } = props;
   const auth = useAuth();
   const { mutate: mutateSignin, isError } = useUserSignin();
   const {
@@ -29,6 +30,23 @@ export function SigninDialog(props: DialogProps) {
     isError: isPermissionErr,
     error: permissionsErr,
   } = usePermissions();
+
+  const removeSessionTimeout = () => {
+    console.log('Timeout started..');
+    var timeoutId;
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+    timeoutId = setTimeout(
+      () => {
+        localStorage.removeItem('user');
+        localStorage.removeItem('permissions');
+        console.log('User Session Timeout');
+        handleSignOut();
+      },
+      3 * 60 * 1000 // 5min session
+    );
+  };
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
@@ -61,6 +79,7 @@ export function SigninDialog(props: DialogProps) {
                 })
               );
               localStorage.setItem('permissions', JSON.stringify(data.data));
+              removeSessionTimeout();
             },
             onError: (err) => {
               console.log('Permissions fetch error', err);
